@@ -1,0 +1,3746 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>تحديد موقع الطالب/ ـة</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root{
+      --bg1:#fbbf24; --bg2:#f59e0b;
+      --brand:#f59e0b; --brand-hover:#d97706;
+      --card:#ffffff; --line:#fcd34d;
+      --text-strong:#78350f; --text:#92400e; --muted:#b45309;
+      --accent:#ea580c; --accent-light:#fed7aa;
+      --success:#16a34a; --error:#dc2626; --warning:#f59e0b; --info:#3b82f6;
+      --radius:16px; --transition:all .3s ease; --shadow:0 8px 32px rgba(245, 158, 11, .2);
+      --safe-top: env(safe-area-inset-top); --safe-right: env(safe-area-inset-right);
+      --safe-bottom: env(safe-area-inset-bottom); --safe-left: env(safe-area-inset-left);
+    }
+    :root.dark{
+      --bg1:#1e1b16; --bg2:#0f0d0a;
+      --brand:#f59e0b; --brand-hover:#fb923c;
+      --card:#1c1917; --line:#44403c;
+      --text-strong:#fef3c7; --text:#fde68a; --muted:#fcd34d;
+      --accent:#fb923c; --accent-light:#451a03;
+      --success:#22c55e; --error:#ef4444; --warning:#fb923c; --info:#60a5fa;
+    }
+    *{box-sizing:border-box; margin:0; padding:0;}
+    html,body{height:100%;}
+    body{
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+      background-attachment: fixed;
+      position: relative;
+      color:var(--text);
+      font-family:'Tajawal',system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+      line-height:1.6; display:flex; flex-direction:column;
+      padding:max(0px,var(--safe-top)) max(0px,var(--safe-right)) max(0px,var(--safe-bottom)) max(0px,var(--safe-left));
+    }
+    
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at 20% 30%, rgba(251, 191, 36, 0.3) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 70%, rgba(234, 88, 12, 0.2) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    
+    body > * {
+      position: relative;
+      z-index: 1;
+    }
+    header{
+      position:relative; 
+      background: linear-gradient(180deg, rgba(255,255,255,0.15) 0%, transparent 100%);
+      border-bottom:0; 
+      padding:1.5rem 1.25rem;
+      backdrop-filter: blur(10px);
+    }
+    .header-content{
+      display:flex; 
+      justify-content:center; 
+      align-items:center; 
+      gap:.8rem; 
+      max-width:1200px; 
+      margin:0 auto; 
+      width:100%;
+    }
+    h1{
+      font-size:clamp(1.6rem, 3vw, 2.3rem);
+      margin:0; 
+      display:flex; 
+      align-items:center; 
+      gap:.8rem; 
+      font-weight:900; 
+      letter-spacing:-.5px;
+      color:#78350f;
+      text-shadow: 0 2px 8px rgba(120, 53, 15, 0.15);
+    }
+    .header-content i,.section-title i,.btn i,.hint i,.bus-icon{ color:currentColor; }
+    .build-tag{ font-size:.8rem; font-weight:800; color:var(--muted); border:1px solid var(--line); border-radius:999px; padding:.15rem .5rem; }
+
+    .container{flex:1; max-width:1200px; margin:1rem auto; padding:0; width:100%;}
+    .card{
+      background: linear-gradient(180deg, #ffffff 0%, #fffbeb 100%);
+      border: 2px solid rgba(251, 191, 36, 0.3);
+      border-radius: 28px;
+      box-shadow: 0 12px 40px rgba(245, 158, 11, 0.15),
+                  0 0 0 1px rgba(255, 255, 255, 0.8);
+      margin: 0 1rem 1.2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #fbbf24, #f59e0b, #ea580c);
+    }
+    .card-body{padding:1.2rem 1rem 1.4rem;}
+
+    .switch-group{ position:absolute; inset-inline-end:1rem; inset-block-start:1rem; display:flex; gap:.6rem; align-items:center; z-index:3; }
+    .theme-switch, .lang-switch, .btn-secondary{
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(251, 191, 36, 0.4);
+      border-radius: 999px;
+      padding: .6rem 1rem;
+      cursor: pointer;
+      color: #78350f;
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      font-weight: 800;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15);
+    }
+    .theme-switch:hover, .lang-switch:hover, .btn-secondary:hover{
+      background: rgba(255, 255, 255, 0.5);
+      border-color: #f59e0b;
+      color: #92400e;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.25);
+    }
+    
+    .theme-switch i, .lang-switch i, .btn-secondary i {
+      font-size: 1.1rem;
+    }
+
+    .section-title-wrap::after{
+      content:""; position:absolute; inset-inline:0; bottom:-.2rem; height:2px; background:var(--line);
+      margin:0 .4rem;
+    }
+
+    .row{display:grid; grid-template-columns:repeat(2,minmax(240px,1fr)); gap:1rem; padding:0 1rem;}
+    label{
+      display:block; margin:.45rem 0 .35rem; font-weight:800; color:var(--text-strong);
+      font-size:clamp(1.02rem, 3vw, 1.35rem);
+    }
+
+    input, select{
+      width: 100%;
+      padding: 1.1rem 1.2rem;
+      border-radius: 14px;
+      border: 2px solid rgba(251, 191, 36, 0.3);
+      font-size: clamp(1.02rem, 2.6vw, 1.08rem);
+      transition: all 0.3s ease;
+      font-family: 'Tajawal', sans-serif;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(8px);
+      color: var(--text);
+      font-weight: 600;
+    }
+    
+    input::placeholder{
+      color: #b45309;
+      opacity: 0.7;
+    }
+    
+    input:hover, select:hover {
+      border-color: rgba(251, 191, 36, 0.5);
+      background: rgba(255, 255, 255, 0.75);
+    }
+    
+    input:focus, select:focus{
+      outline: none;
+      border-color: #f59e0b;
+      box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.15),
+                  0 4px 12px rgba(245, 158, 11, 0.2);
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    select{
+      -webkit-appearance:none; -moz-appearance:none; appearance:none;
+      background-image:linear-gradient(45deg, transparent 50%, #9aa3af 50%), linear-gradient(135deg, #9aa3af 50%, transparent 50%), linear-gradient(to right, transparent, transparent);
+      background-position: calc(100% - 18px) calc(1.2em), calc(100% - 13px) calc(1.2em), calc(100% - 2.5rem) 0.5rem;
+      background-size:5px 5px, 5px 5px, 1px 1.8rem; background-repeat:no-repeat;
+    }
+
+    .hint{color:var(--muted); font-size:.98rem; margin-top:.25rem; display:flex; align-items:center; gap:.45rem; font-weight:500; padding:0 1rem;}
+
+    .sp{display:flex; justify-content:space-between; gap:.8rem; align-items:center; flex-wrap:wrap; margin-top:1rem; padding:0 1rem;}
+    .toolbar{display:flex; gap:.6rem; flex-wrap:wrap;}
+    .btn{
+      display: inline-flex;
+      align-items: center;
+      gap: .6rem;
+      justify-content: center;
+      padding: 1rem 1.5rem;
+      border-radius: 16px;
+      border: none;
+      background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
+      color: #fff;
+      font-weight: 900;
+      cursor: pointer;
+      font-size: clamp(1rem, 2.6vw, 1.08rem);
+      transition: all 0.3s ease;
+      white-space: nowrap;
+      min-width: 48px;
+      min-height: 52px;
+      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .btn:hover::before { opacity: 1; }
+    
+    .btn:hover{
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(245, 158, 11, 0.4);
+    }
+    
+    .btn:active {
+      transform: translateY(-1px);
+    }
+    
+    .btn:focus-visible{
+      outline: 3px solid rgba(245, 158, 11, 0.5);
+      outline-offset: 3px;
+    }
+    
+    .btn.secondary{
+      background: rgba(255, 255, 255, 0.9);
+      color: #92400e;
+      border: 2px solid #fbbf24;
+      box-shadow: 0 4px 12px rgba(251, 191, 36, 0.2);
+    }
+    
+    .btn.secondary:hover{
+      background: #fff;
+      border-color: #f59e0b;
+      color: #78350f;
+    }
+    
+    .btn:disabled{
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+    
+    .btn i {
+      font-size: 1.15rem;
+    }
+
+    .pill{
+      padding: .8rem 1.2rem;
+      border-radius: 999px;
+      border: 2px solid var(--line);
+      color: var(--muted);
+      font-size: clamp(.95rem, 2.4vw, 1.05rem);
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-weight: 800;
+      background: rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+    
+    .pill i {
+      font-size: 1.1rem;
+    }
+    
+    .pill.success{
+      color: #14532d;
+      border-color: #22c55e;
+      background: linear-gradient(135deg, rgba(34,197,94,.25), rgba(34,197,94,.15));
+    }
+    
+    .pill.error{
+      color: #7f1d1d;
+      border-color: #ef4444;
+      background: linear-gradient(135deg, rgba(239,68,68,.25), rgba(239,68,68,.15));
+    }
+
+    .required::after{content:" *"; color:#ef4444;}
+    .other-district-container{display:none; margin-top:.5rem;}
+    .other-district-container.visible{display:block;}
+    .coords-field{cursor:default!important;}
+    .coords-field:not([data-url]){color:var(--muted);}
+
+    .overlay{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.45); z-index:1000; }
+    .overlay.visible{ display:flex; }
+    .overlay .box{ background:var(--card); color:var(--text); border:2px solid var(--brand); border-radius:18px; padding:1.2rem 1.4rem; max-width:720px; margin:1rem; text-align:center; box-shadow:0 10px 30px rgba(0,0,0,.25); }
+    .overlay .box h3{ margin:0 0 .5rem; font-size:1.25rem; color:var(--text-strong); }
+    .overlay .brand{ font-weight:800; margin-top:.25rem; color:var(--text-strong); }
+    .overlay .actions{ margin-top:.9rem; display:flex; justify-content:center; gap:.6rem; }
+    .overlay .actions .btn{ padding:.6rem 1rem; }
+
+    /* تحسينات للاستجابة على جميع الشاشات */
+    
+    /* شاشات XL - 1400px فما فوق */
+    @media (min-width: 1400px) {
+      .container {
+        max-width: 1320px;
+      }
+      
+      h1 {
+        font-size: 2.5rem;
+      }
+      
+      .card {
+        border-radius: 32px;
+      }
+    }
+    
+    /* شاشات كبيرة - 1200px إلى 1400px */
+    @media (max-width: 1399px) and (min-width: 1200px) {
+      .container {
+        max-width: 1140px;
+        padding: 0 1rem;
+      }
+    }
+    
+    /* شاشات متوسطة كبيرة - 992px إلى 1200px */
+    @media (max-width: 1200px) {
+      .container {
+        max-width: 98%;
+        margin: 0.5rem auto;
+        padding: 0 0.75rem;
+      }
+      
+      .card {
+        margin: 0 0.75rem 1.2rem;
+      }
+      
+      h1 {
+        font-size: clamp(1.8rem, 3.5vw, 2.2rem);
+      }
+      
+      .header-content .bus-icon {
+        font-size: 3rem;
+        padding: 0.7rem;
+      }
+    }
+
+    /* شاشات متوسطة - 768px إلى 992px */
+    @media (max-width: 992px) {
+      .container {
+        max-width: 100%;
+        padding: 0;
+      }
+      
+      .row {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      
+      .card {
+        margin: 0 0.5rem 1rem;
+        border-radius: 24px;
+      }
+      
+      .card-body {
+        padding: 1.2rem 1rem;
+      }
+      
+      header {
+        padding: 1.25rem 1rem;
+      }
+      
+      .switch-group {
+        gap: 0.5rem;
+      }
+      
+      .theme-switch, .lang-switch, .btn-secondary {
+        padding: 0.55rem 0.85rem;
+        font-size: 0.9rem;
+      }
+    }
+
+    /* شاشات التابليت - 768px إلى 820px */
+    @media (max-width: 820px) {
+      .container {
+        max-width: 100%;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+      }
+      
+      .card {
+        border-radius: 0;
+        margin: 0;
+        border-left: none;
+        border-right: none;
+        box-shadow: none;
+      }
+      
+      .card-body {
+        padding: 1.2rem 1rem;
+      }
+      
+      .row {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        padding: 0 1rem;
+      }
+      
+      .hint {
+        padding: 0 1rem;
+        font-size: 0.95rem;
+      }
+      
+      .switch-group {
+        inset-inline-end: 0.8rem;
+        inset-block-start: 0.8rem;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+      
+      label {
+        font-size: clamp(1.05rem, 3.5vw, 1.3rem);
+      }
+      
+      .btn {
+        padding: 1rem 1.3rem;
+        min-height: 50px;
+      }
+      
+      #status {
+        width: 100%;
+        justify-content: center;
+        margin-top: 0.6rem;
+      }
+      
+      .sp {
+        padding: 0 1rem;
+        gap: 0.8rem;
+      }
+      
+      .section-title-wrap {
+        padding: 0.8rem 1rem 0.6rem;
+        margin: 0 0.5rem 1rem;
+      }
+    }
+
+    /* شاشات التابليت الصغيرة - 600px إلى 768px */
+    @media (max-width: 768px) {
+      header {
+        padding: 1rem;
+      }
+      
+      .header-content {
+        gap: 0.6rem;
+      }
+      
+      .header-content .bus-icon {
+        font-size: 2.5rem;
+        padding: 0.6rem;
+        border-radius: 16px;
+      }
+      
+      h1 {
+        font-size: clamp(1.4rem, 3.2vw, 1.8rem);
+      }
+      
+      .section-title-wrap {
+        padding: 0.7rem 0.9rem 0.5rem;
+        margin: 0 0.5rem 0.9rem;
+      }
+      
+      .section-title {
+        font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+      }
+      
+      .section-title i {
+        width: 38px;
+        height: 38px;
+        font-size: 1.15rem;
+      }
+      
+      .section-subtitle {
+        font-size: 0.92rem;
+        padding: 0.35rem 0.85rem;
+      }
+      
+      input, select {
+        padding: 1rem 1.1rem;
+        font-size: 1rem;
+      }
+      
+      .btn {
+        font-size: 1rem;
+      }
+      
+      .pill {
+        font-size: 0.95rem;
+        padding: 0.75rem 1.1rem;
+      }
+      
+      /* Select2 للتابليت */
+      .select2-container {
+        width: 100% !important;
+      }
+      .select2-container .select2-selection--single {
+        min-height: 48px;
+        border-radius: 14px;
+      }
+      .select2-container .select2-selection__rendered {
+        line-height: 48px;
+        padding: 0 1rem;
+      }
+      .select2-container .select2-selection__arrow {
+        height: 48px;
+      }
+      .select2-container .select2-search__field {
+        font-size: 1rem;
+        padding: 0.7rem;
+      }
+    }
+
+    /* الهواتف الكبيرة - 480px إلى 600px */
+    @media (max-width: 600px) {
+      .card {
+        width: 100%;
+        margin: 0;
+        border-radius: 0;
+      }
+      
+      .card-body {
+        padding: 1rem 0.9rem;
+      }
+      
+      .sp {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 0 0.9rem;
+        gap: 0.9rem;
+      }
+      
+      .toolbar {
+        flex-direction: column;
+        width: 100%;
+        gap: 0.7rem;
+      }
+      
+      .app-footer {
+        width: 100%;
+        padding: 2rem 1rem;
+        margin: 0;
+        border-radius: 0;
+      }
+      
+      .overlay .box {
+        margin: 1rem 0.75rem;
+        padding: 1.2rem 1rem;
+        max-width: calc(100% - 1.5rem);
+      }
+      
+      .overlay .actions {
+        flex-direction: column;
+        gap: 0.6rem;
+      }
+      
+      .overlay .actions .btn {
+        width: 100%;
+      }
+    }
+
+    /* الهواتف المتوسطة - 360px إلى 480px */
+    @media (max-width: 480px) {
+      body {
+        font-size: 15px;
+      }
+      
+      header {
+        padding: 0.9rem 0.75rem;
+      }
+      
+      .header-content {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+      }
+      
+      .header-content .bus-icon {
+        font-size: 2.2rem;
+        padding: 0.55rem;
+      }
+      
+      h1 {
+        font-size: 1.35rem;
+        text-align: center;
+        flex-wrap: wrap;
+        line-height: 1.5;
+        gap: 0.5rem;
+      }
+      
+      .switch-group {
+        position: static;
+        justify-content: center;
+        margin-bottom: 0.9rem;
+        gap: 0.4rem;
+        flex-wrap: wrap;
+      }
+      
+      .switch-group button {
+        font-size: 0;
+        padding: 0.6rem 0.7rem;
+        min-width: 44px;
+        min-height: 44px;
+      }
+      
+      .switch-group button i {
+        font-size: 1.3rem;
+        margin: 0;
+      }
+      
+      .switch-group button span {
+        display: none;
+      }
+      
+      .card-body {
+        padding: 0.9rem 0.7rem 1rem;
+      }
+      
+      .row {
+        grid-template-columns: 1fr !important;
+        gap: 0.9rem;
+        padding: 0 0.7rem;
+      }
+      
+      label {
+        font-size: 1.05rem;
+        margin: 0.4rem 0 0.3rem;
+      }
+      
+      input, select {
+        padding: 0.95rem 1rem;
+        font-size: 1rem;
+        border-radius: 12px;
+      }
+      
+      .btn {
+        width: 100%;
+        min-height: 52px;
+        font-size: 1.05rem;
+        padding: 1rem 1.2rem;
+      }
+      
+      .btn i {
+        font-size: 1.2rem;
+      }
+      
+      .toolbar {
+        flex-direction: column;
+        width: 100%;
+        gap: 0.7rem;
+      }
+      
+      .toolbar .btn {
+        justify-content: center;
+      }
+      
+      #status {
+        font-size: 0.95rem;
+        margin-top: 0.7rem;
+        text-align: center;
+        width: 100%;
+        padding: 0.75rem 1rem;
+      }
+      
+      .hint {
+        padding: 0 0.7rem;
+        font-size: 0.9rem;
+      }
+      
+      .section-title-wrap {
+        padding: 0.7rem 0.7rem 0.5rem;
+        margin: 0 0.4rem 0.8rem;
+      }
+      
+      .section-title {
+        font-size: 1.15rem;
+        gap: 0.5rem;
+      }
+      
+      .section-title i {
+        width: 36px;
+        height: 36px;
+        font-size: 1rem;
+      }
+      
+      .section-subtitle {
+        font-size: 0.88rem;
+      }
+      
+      .field-error {
+        font-size: 0.82rem;
+      }
+      
+      .app-footer {
+        padding: 1.8rem 0.9rem;
+      }
+      
+      .footer-contact, .footer-social {
+        gap: 0.8rem;
+      }
+      
+      .footer-contact a, .footer-social a {
+        width: 44px;
+        height: 44px;
+        font-size: 1.2rem;
+      }
+    }
+
+    /* الهواتف الصغيرة - أقل من 360px */
+    @media (max-width: 360px) {
+      header {
+        padding: 0.8rem 0.6rem;
+      }
+      
+      .header-content .bus-icon {
+        font-size: 2rem;
+        padding: 0.5rem;
+      }
+      
+      h1 {
+        font-size: 1.2rem;
+      }
+      
+      .card-body {
+        padding: 0.8rem 0.5rem 1rem;
+      }
+      
+      .row {
+        padding: 0 0.5rem;
+        gap: 0.8rem;
+      }
+      
+      .hint {
+        padding: 0 0.5rem;
+        font-size: 0.85rem;
+      }
+      
+      label {
+        font-size: 1rem;
+      }
+      
+      input, select {
+        padding: 0.85rem 0.9rem;
+        font-size: 0.95rem;
+      }
+      
+      .btn {
+        padding: 0.9rem 1rem;
+        font-size: 1rem;
+        min-height: 48px;
+      }
+      
+      .section-title-wrap {
+        padding: 0.6rem 0.5rem 0.4rem;
+        margin: 0 0.3rem 0.7rem;
+      }
+      
+      .section-title {
+        font-size: 1.05rem;
+      }
+      
+      .section-title i {
+        width: 32px;
+        height: 32px;
+        font-size: 0.95rem;
+      }
+      
+      .section-subtitle {
+        font-size: 0.82rem;
+        padding: 0.3rem 0.7rem;
+      }
+      
+      .pill {
+        font-size: 0.88rem;
+        padding: 0.65rem 0.9rem;
+      }
+      
+      .sp {
+        padding: 0 0.5rem;
+      }
+      
+      .switch-group button {
+        padding: 0.55rem 0.65rem;
+        min-width: 42px;
+        min-height: 42px;
+      }
+      
+      .switch-group button i {
+        font-size: 1.2rem;
+      }
+      
+      .app-footer {
+        padding: 1.5rem 0.7rem;
+      }
+      
+      .footer-rights {
+        font-size: 0.9rem;
+      }
+      
+      .footer-contact a, .footer-social a {
+        width: 42px;
+        height: 42px;
+        font-size: 1.1rem;
+      }
+      
+      .overlay .box {
+        margin: 0.5rem;
+        padding: 1rem 0.8rem;
+      }
+    }
+    
+    /* شاشات الهواتف القديمة - أقل من 320px */
+    @media (max-width: 320px) {
+      body {
+        font-size: 14px;
+      }
+      
+      header {
+        padding: 0.7rem 0.5rem;
+      }
+      
+      h1 {
+        font-size: 1.1rem;
+      }
+      
+      .card-body {
+        padding: 0.7rem 0.4rem 0.9rem;
+      }
+      
+      .row {
+        padding: 0 0.4rem;
+      }
+      
+      input, select {
+        padding: 0.8rem;
+        font-size: 0.92rem;
+      }
+      
+      .btn {
+        padding: 0.85rem 0.9rem;
+        font-size: 0.95rem;
+        min-height: 46px;
+      }
+      
+      .section-title {
+        font-size: 1rem;
+      }
+    }
+
+    html,body{overflow-x:hidden;}
+
+    /* أنماط Select2 المحسّنة */
+    .select2-container--default .select2-selection--single {
+      background: rgba(255, 255, 255, 0.6);
+      border: 2px solid rgba(251, 191, 36, 0.3);
+      border-radius: 14px;
+      height: auto;
+      min-height: 52px;
+      transition: all 0.3s ease;
+    }
+    
+    .select2-container--default .select2-selection--single:hover {
+      border-color: rgba(251, 191, 36, 0.5);
+      background: rgba(255, 255, 255, 0.75);
+    }
+    
+    .select2-container--default.select2-container--open .select2-selection--single {
+      border-color: #f59e0b;
+      box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.15);
+      background: rgba(255, 255, 255, 0.9);
+    }
+    
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+      color: var(--text);
+      line-height: 48px;
+      padding: 0 1.2rem;
+      font-weight: 600;
+      font-size: 1.02rem;
+    }
+    
+    .select2-container--default .select2-selection--single .select2-selection__placeholder {
+      color: #b45309;
+      opacity: 0.7;
+    }
+    
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+      height: 48px;
+      right: 12px;
+    }
+    
+    html[dir="rtl"] .select2-container--default .select2-selection--single .select2-selection__arrow {
+      left: 12px;
+      right: auto;
+    }
+    
+    /* قائمة البحث */
+    .select2-dropdown {
+      background: #fff;
+      border: 2px solid #f59e0b;
+      border-radius: 14px;
+      box-shadow: 0 8px 32px rgba(245, 158, 11, 0.25);
+      margin-top: 4px;
+    }
+    
+    .select2-search--dropdown {
+      padding: 0.8rem;
+      background: rgba(251, 191, 36, 0.08);
+    }
+    
+    .select2-search--dropdown .select2-search__field {
+      background: #fff;
+      border: 2px solid rgba(251, 191, 36, 0.3);
+      border-radius: 10px;
+      padding: 0.8rem 1rem;
+      font-family: 'Tajawal', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+      transition: all 0.3s ease;
+    }
+    
+    .select2-search--dropdown .select2-search__field:focus {
+      outline: none;
+      border-color: #f59e0b;
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+    }
+    
+    .select2-search--dropdown .select2-search__field::placeholder {
+      color: #b45309;
+      opacity: 0.7;
+    }
+    
+    /* عناصر القائمة */
+    .select2-results__option {
+      padding: 0.9rem 1.2rem;
+      font-family: 'Tajawal', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+      transition: all 0.2s ease;
+      border-radius: 8px;
+      margin: 0.2rem 0.5rem;
+    }
+    
+    .select2-results__option--highlighted {
+      background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(245, 158, 11, 0.15)) !important;
+      color: #78350f !important;
+    }
+    
+    .select2-results__option--selected {
+      background: linear-gradient(135deg, #fbbf24, #f59e0b) !important;
+      color: #78350f !important;
+      font-weight: 800;
+    }
+    
+    .select2-results__option[aria-selected=true]:not(.select2-results__option--highlighted) {
+      background: rgba(251, 191, 36, 0.12) !important;
+    }
+    
+    /* رسائل */
+    .select2-results__message {
+      padding: 1rem;
+      text-align: center;
+      color: var(--muted);
+      font-style: italic;
+    }
+    
+    .select2-container--default .select2-results__option--disabled {
+      color: #d1d5db;
+      font-weight: 800;
+      background: rgba(0, 0, 0, 0.03);
+    }
+    
+    /* الوضع الداكن */
+    :root.dark .select2-container--default .select2-selection--single {
+      background: rgba(28, 25, 23, 0.6);
+      border-color: rgba(245, 158, 11, 0.3);
+      color: #fef3c7;
+    }
+    
+    :root.dark .select2-container--default .select2-selection--single .select2-selection__rendered {
+      color: #fef3c7;
+    }
+    
+    :root.dark .select2-container--default .select2-selection--single .select2-selection__placeholder {
+      color: #fcd34d;
+    }
+    
+    :root.dark .select2-dropdown {
+      background: #1c1917;
+      border-color: #f59e0b;
+    }
+    
+    :root.dark .select2-search--dropdown {
+      background: rgba(245, 158, 11, 0.1);
+    }
+    
+    :root.dark .select2-search--dropdown .select2-search__field {
+      background: rgba(28, 25, 23, 0.8);
+      border-color: rgba(245, 158, 11, 0.3);
+      color: #fef3c7;
+    }
+    
+    :root.dark .select2-results__option {
+      color: #fde68a;
+    }
+    
+    :root.dark .select2-results__option--highlighted {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.25), rgba(234, 88, 12, 0.2)) !important;
+      color: #fbbf24 !important;
+    }
+    
+    :root.dark .select2-results__option--selected {
+      background: linear-gradient(135deg, #f59e0b, #ea580c) !important;
+      color: #fff !important;
+    }
+    
+    :root.dark .select2-results__option[aria-selected=true]:not(.select2-results__option--highlighted) {
+      background: rgba(245, 158, 11, 0.15) !important;
+    }
+
+    :root.dark { 
+      --field-bg:#1a1d2b; 
+      --field-hover:#222b3d; 
+      --field-focus:#2c3b55; 
+    }
+    input, select { 
+      background: var(--field-bg); 
+      color: var(--text); 
+    }
+    input:hover, select:hover { 
+      background: var(--field-hover); 
+    }
+    input:focus, select:focus { 
+      background: var(--field-focus); 
+      border-color: var(--brand); 
+      box-shadow:0 0 0 3px rgba(242,201,76,.25); 
+      outline:none; 
+    }
+
+    .modal{ 
+      display:none; 
+      position:fixed; 
+      inset:0; 
+      z-index:1000; 
+      background:rgba(0,0,0,.55);
+      backdrop-filter: blur(4px);
+      animation: modalFadeIn 0.3s ease;
+    }
+    
+    @keyframes modalFadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    @keyframes modalSlideIn {
+      from { opacity: 0; transform: translateY(-20px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    
+    .modal-content{ 
+      background:var(--card); 
+      color:var(--text); 
+      width:min(620px, 94%); 
+      margin:5vh auto; 
+      border-radius:20px; 
+      border:1px solid var(--line); 
+      box-shadow: 0 20px 60px rgba(0,0,0,.25), 0 0 0 1px rgba(255,255,255,.1);
+      padding:0;
+      position:relative;
+      max-height: 85vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      animation: modalSlideIn 0.3s ease;
+    }
+    
+    .modal-header {
+      background: linear-gradient(135deg, var(--brand), #e6b637);
+      padding: 1.2rem 1.5rem;
+      border-radius: 20px 20px 0 0;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      position: relative;
+    }
+    
+    .modal-header-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(255,255,255,0.25);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      color: #1f2937;
+    }
+    
+    .modal-title{ 
+      font-size:clamp(1.3rem, 2.8vw, 1.7rem); 
+      margin:0; 
+      font-weight:800; 
+      color: #1f2937;
+      flex: 1;
+    }
+    
+    .modal-body {
+      padding: 1.2rem 1.5rem 1.5rem;
+      overflow-y: auto;
+      flex: 1;
+    }
+    
+    .help-list{ 
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    
+    .help-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.8rem;
+      padding: 0.9rem 1rem;
+      margin-bottom: 0.6rem;
+      background: rgba(242, 201, 76, 0.08);
+      border-radius: 12px;
+      border-right: 4px solid var(--brand);
+      line-height: 1.7;
+      transition: all 0.2s ease;
+    }
+    
+    html[dir="ltr"] .help-list li {
+      border-right: none;
+      border-left: 4px solid var(--brand);
+    }
+    
+    .help-list li:hover {
+      background: rgba(242, 201, 76, 0.15);
+      transform: translateX(-3px);
+    }
+    
+    html[dir="ltr"] .help-list li:hover {
+      transform: translateX(3px);
+    }
+    
+    .help-list li::before {
+      content: attr(data-step);
+      min-width: 28px;
+      height: 28px;
+      background: var(--brand);
+      color: #1f2937;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+    
+    .close{ 
+      position:absolute; 
+      inset-inline-end: 1rem; 
+      inset-block-start: 50%;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,0.25);
+      border: 0;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 1.4rem; 
+      cursor:pointer; 
+      color: #1f2937;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+    
+    .close:hover{ 
+      background: rgba(255,255,255,0.4);
+      transform: translateY(-50%) rotate(90deg);
+    }
+    
+    :root.dark .modal{ 
+      background:rgba(0,0,0,.7); 
+    }
+    
+    :root.dark .modal-header {
+      background: linear-gradient(135deg, #2d3748, #1a202c);
+    }
+    
+    :root.dark .modal-header-icon {
+      background: rgba(242, 201, 76, 0.2);
+      color: var(--brand);
+    }
+    
+    :root.dark .modal-title {
+      color: var(--text-strong);
+    }
+    
+    :root.dark .close {
+      background: rgba(255,255,255,0.1);
+      color: var(--text-strong);
+    }
+    
+    :root.dark .close:hover {
+      background: rgba(255,255,255,0.2);
+    }
+    
+    :root.dark .help-list li {
+      background: rgba(242, 201, 76, 0.05);
+    }
+    
+    :root.dark .help-list li:hover {
+      background: rgba(242, 201, 76, 0.1);
+    }
+
+    .tabs{ 
+      display:flex; 
+      gap:.5rem; 
+      margin: 0 0 1.2rem;
+      background: rgba(0,0,0,0.05);
+      padding: 0.4rem;
+      border-radius: 12px;
+    }
+    
+    :root.dark .tabs {
+      background: rgba(255,255,255,0.05);
+    }
+    
+    .tab-btn{ 
+      flex: 1;
+      padding: .7rem 1rem; 
+      border: none;
+      border-radius: 10px; 
+      background: transparent; 
+      color:var(--text); 
+      cursor:pointer;
+      font-weight: 700;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    
+    .tab-btn:hover:not(.tab-active) {
+      background: rgba(242, 201, 76, 0.1);
+    }
+    
+    .tab-btn.tab-active{ 
+      background: var(--brand); 
+      color:#1f2937;
+      box-shadow: 0 2px 8px rgba(242, 201, 76, 0.3);
+    }
+    
+    .tab-panel{ 
+      margin-top: 0; 
+    }
+    #faqList .qa{ 
+      margin: 0 0 0.8rem;
+      background: rgba(0,0,0,0.03);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      transition: all 0.2s ease;
+    }
+    
+    #faqList .qa:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transform: translateY(-2px);
+    }
+    
+    :root.dark #faqList .qa {
+      background: rgba(255,255,255,0.03);
+    }
+    
+    #faqList .q{ 
+      font-weight: 800; 
+      color: var(--text-strong);
+      padding: 0.9rem 1rem;
+      background: rgba(242, 201, 76, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      cursor: pointer;
+    }
+    
+    #faqList .q::before {
+      content: '\f059';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      color: var(--brand);
+      font-size: 1.1rem;
+    }
+    
+    #faqList .a{ 
+      color:var(--text); 
+      padding: 0.9rem 1rem 0.9rem 2.5rem;
+      line-height: 1.7;
+      border-top: 1px solid var(--line);
+    }
+    
+    html[dir="ltr"] #faqList .a {
+      padding: 0.9rem 2.5rem 0.9rem 1rem;
+    }
+    
+    /* نصائح إضافية */
+    .help-tips {
+      margin-top: 1.2rem;
+      padding: 1rem;
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(22, 163, 74, 0.05));
+      border-radius: 12px;
+      border: 1px solid rgba(34, 197, 94, 0.2);
+    }
+    
+    .help-tips-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 800;
+      color: #16a34a;
+      margin-bottom: 0.6rem;
+      font-size: 1rem;
+    }
+    
+    .help-tips ul {
+      margin: 0;
+      padding-right: 1.2rem;
+      color: var(--text);
+    }
+    
+    html[dir="ltr"] .help-tips ul {
+      padding-right: 0;
+      padding-left: 1.2rem;
+    }
+    
+    .help-tips li {
+      margin-bottom: 0.4rem;
+      line-height: 1.6;
+    }
+    
+    /* معلومات التواصل في التعليمات */
+    .help-contact {
+      margin-top: 1.2rem;
+      padding: 1rem;
+      background: rgba(59, 130, 246, 0.08);
+      border-radius: 12px;
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+    
+    .help-contact a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: var(--card);
+      border-radius: 8px;
+      color: var(--text-strong);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+      border: 1px solid var(--line);
+    }
+    
+    .help-contact a:hover {
+      background: var(--brand);
+      color: #1f2937;
+      border-color: var(--brand);
+      transform: translateY(-2px);
+    }
+    
+    .help-contact a i {
+      font-size: 1.1rem;
+    }
+    
+    /* استجابة نافذة التعليمات للهواتف */
+    @media (max-width: 480px) {
+      .modal-content {
+        margin: 1vh auto;
+        max-height: 98vh;
+        width: 98%;
+        border-radius: 20px 20px 0 0;
+      }
+      
+      .modal-header {
+        padding: 1rem 0.9rem;
+        border-radius: 20px 20px 0 0;
+      }
+      
+      .modal-header-icon {
+        width: 42px;
+        height: 42px;
+        font-size: 1.2rem;
+      }
+      
+      .modal-title {
+        font-size: 1.2rem;
+      }
+      
+      .close {
+        width: 32px;
+        height: 32px;
+        font-size: 1.2rem;
+      }
+      
+      .modal-body {
+        padding: 1rem 0.9rem;
+      }
+      
+      .help-list li {
+        padding: 0.7rem 0.8rem;
+        font-size: 0.95rem;
+      }
+      
+      .help-list li::before {
+        min-width: 26px;
+        height: 26px;
+        font-size: 0.85rem;
+      }
+      
+      .tabs {
+        flex-direction: row;
+        gap: 0.4rem;
+      }
+      
+      .tab-btn {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.88rem;
+        flex: 1;
+      }
+      
+      .tab-btn i {
+        font-size: 1rem;
+      }
+      
+      #faqList .qa {
+        margin: 0 0 0.7rem;
+      }
+      
+      #faqList .q {
+        padding: 0.75rem 0.85rem;
+        font-size: 0.95rem;
+      }
+      
+      #faqList .a {
+        padding: 0.75rem 0.85rem 0.75rem 2.2rem;
+        font-size: 0.9rem;
+      }
+      
+      .help-tips {
+        padding: 0.85rem;
+      }
+      
+      .help-tips-title {
+        font-size: 0.95rem;
+      }
+      
+      .help-tips ul {
+        font-size: 0.9rem;
+      }
+      
+      .help-contact {
+        padding: 0.85rem;
+        gap: 0.7rem;
+      }
+      
+      .help-contact a {
+        padding: 0.45rem 0.85rem;
+        font-size: 0.85rem;
+      }
+    }
+    
+    @media (max-width: 360px) {
+      .modal-content {
+        width: 100%;
+        margin: 0;
+        max-height: 100vh;
+        border-radius: 0;
+      }
+      
+      .modal-header {
+        padding: 0.9rem 0.7rem;
+        border-radius: 0;
+      }
+      
+      .modal-body {
+        padding: 0.9rem 0.7rem;
+      }
+      
+      .help-list li {
+        padding: 0.6rem 0.7rem;
+        font-size: 0.9rem;
+      }
+      
+      .tab-btn {
+        font-size: 0.82rem;
+      }
+    }
+      }
+      
+      .tabs {
+        flex-direction: column;
+      }
+    }
+
+    /* تحسينات الفوتر - ألوان واضحة */
+    .app-footer { 
+      background: var(--card); 
+      color: var(--text-strong); 
+      padding: 1.5rem; 
+      text-align: center; 
+      margin: 1rem auto; 
+      border-radius: 1rem; 
+      max-width: 800px; 
+      width: 90%;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+    
+    .app-footer .contact{ 
+      margin-top:.35rem; 
+    }
+    
+    .app-footer a{ 
+      color: var(--brand);
+      text-decoration: none;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+    
+    .app-footer a:hover{ 
+      color: var(--brand-hover);
+      text-decoration: underline;
+    }
+
+    .build-tag{ 
+      font-size:inherit !important; 
+      color:inherit !important; 
+      border:0 !important; 
+      padding:0 !important; 
+    }
+    
+    .card.hidden { 
+      display: none; 
+    }
+    
+    .contact-box {
+      margin: 1rem auto;
+      padding: 1rem;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--card);
+      text-align: center;
+      max-width: 300px;
+    }
+    .contact-box p {
+      margin: 0.5rem 0;
+      font-size: 0.95rem;
+    }
+    .contact-box i {
+      margin-left: 0.5rem;
+      color: var(--brand);
+    }
+
+    #helpModal .actions {
+      margin-top: 1rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    .section-title-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      padding: .8rem 1rem .6rem;
+      margin: 0 .6rem 1rem;
+      position: relative;
+      text-align: right;
+    }
+
+    .section-title {
+      color: #78350f;
+      font-size: clamp(1.35rem, 2.8vw, 1.85rem);
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+      margin-bottom: .4rem;
+      justify-content: flex-start;
+    }
+    
+    .section-title i {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      color: #78350f;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+    }
+
+    .section-subtitle {
+      color: #ea580c;
+      font-weight: 700;
+      font-size: 1rem;
+      margin: 0;
+      text-align: center;
+      padding: 0.4rem 1rem;
+      background: rgba(234, 88, 12, 0.08);
+      border-radius: 8px;
+      display: inline-block;
+    }
+
+    .btn {
+      min-width: 120px;
+      min-height: 48px;
+    }
+
+    #saveBtn {
+      background: var(--brand);
+      color: #1f2937;
+    }
+
+    #saveBtn.active {
+      background: #22c55e !important;
+      color: #fff !important;
+    }
+
+    .bus-icon {
+      font-size: 1.5em;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    
+    .build-tag {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5em !important;
+      color: inherit !important;
+      border: 0 !important;
+      padding: 0 !important;
+      margin: 0 0 0 .3rem;
+    }
+
+    .header-content{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:1rem;
+    }
+    
+    .header-content h1{
+      display:flex;
+      align-items:center;
+      gap:1rem;
+      font-weight:800;
+      font-size:clamp(1.4rem,2.8vw,2rem);
+    }
+    
+    .header-content .bus-icon{
+      font-size:2rem;
+      line-height:1;
+      vertical-align:middle;
+    }
+
+    #backToTop{
+      display: none;
+      position: fixed;
+      bottom: 24px;
+      inset-inline-end: 24px;
+      z-index: 99;
+      background: linear-gradient(135deg, #f59e0b, #ea580c);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 56px;
+      height: 56px;
+      font-size: 1.3rem;
+      cursor: pointer;
+      box-shadow: 0 6px 24px rgba(245, 158, 11, 0.4);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    #backToTop:hover{
+      background: linear-gradient(135deg, #ea580c, #dc2626);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 32px rgba(245, 158, 11, 0.5);
+    }
+    
+    #backToTop:active {
+      transform: translateY(-2px);
+    }
+    }
+
+    .footer-contact, .footer-social {
+      margin-top: .6rem;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    
+    .footer-rights {
+      font-weight: 700;
+      margin-bottom: .5rem;
+      color: var(--text-strong);
+      font-size: 1rem;
+    }
+    
+    /* تحسينات إضافية للفوتر */
+    .footer-contact a,
+    .footer-social a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.8rem;
+      background: rgba(242, 201, 76, 0.1);
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+    
+    .footer-contact a:hover,
+    .footer-social a:hover {
+      background: rgba(242, 201, 76, 0.2);
+      transform: translateY(-2px);
+    }
+    
+    .app-footer i {
+      color: var(--brand);
+    }
+  
+    .header-content .bus-icon {
+      font-size: 3.5rem;
+      color: #fff;
+      background: linear-gradient(135deg, #ea580c 0%, #dc2626 100%);
+      padding: 0.8rem;
+      border-radius: 20px;
+      box-shadow: 0 8px 24px rgba(234, 88, 12, 0.4), 
+                  0 0 0 4px rgba(255, 255, 255, 0.3);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      animation: busFloat 3s ease-in-out infinite;
+    }
+    
+    :root.dark .header-content .bus-icon {
+      background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
+      box-shadow: 0 8px 24px rgba(245, 158, 11, 0.4), 
+                  0 0 0 4px rgba(251, 191, 36, 0.2);
+    }
+    
+    @keyframes busFloat {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+    #customSplash .bus-icon {
+      animation: pulse 1.5s infinite ease-in-out;
+    }
+
+
+    .app-footer {
+      background: linear-gradient(135deg, #78350f, #92400e);
+      color: #fef3c7;
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      margin-top: 3rem;
+      border-radius: 0;
+      box-shadow: 0 -8px 32px rgba(120, 53, 15, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .app-footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #fbbf24, #f59e0b, #ea580c, #f59e0b, #fbbf24);
+      background-size: 200% 100%;
+      animation: gradient 3s linear infinite;
+    }
+    
+    @keyframes gradient {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
+    }
+    
+    .app-footer .footer-rights {
+      font-size: 1rem;
+      color: #fef3c7;
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+    }
+    
+    .footer-contact, .footer-social {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.2rem;
+    }
+    
+    .footer-contact a, .footer-social a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(251, 191, 36, 0.2);
+      color: #fbbf24;
+      font-size: 1.3rem;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      border: 2px solid rgba(251, 191, 36, 0.3);
+    }
+    
+    .footer-contact a:hover, .footer-social a:hover {
+      background: #fbbf24;
+      color: #78350f;
+      transform: translateY(-4px) scale(1.1);
+      box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
+    }
+    
+    .app-footer .footer-dev {
+      font-size: 0.85rem;
+      color: #fcd34d;
+      margin-top: 1rem;
+      opacity: 0.9;
+      font-weight: 600;
+    }
+
+
+    :root.dark .app-footer {
+      background: linear-gradient(135deg, #1f2937, #0f172a);
+      color: #f2f2f2;
+    }
+    :root.dark .app-footer .footer-rights {
+      color: #ddd;
+    }
+    :root.dark .footer-contact a,
+    :root.dark .footer-social a {
+      background: #2d3748;
+      color: #f2f2f2;
+    }
+    :root.dark .footer-contact a:hover,
+    :root.dark .footer-social a:hover {
+      background: #f2c94c;
+      color: #1f2937;
+    }
+    :root.dark .app-footer .footer-dev {
+      color: #bbb;
+    }
+
+
+    /* انتقال سلس بين الوضعين للفوتر */
+    .app-footer, .app-footer * {
+      transition: all 0.4s ease;
+    }
+
+    /* تحسين خلفية نموذج الإدخال */
+    .card {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(8px);
+    }
+    :root.dark .card {
+      background: rgba(30, 41, 59, 0.85);
+      backdrop-filter: blur(8px);
+    }
+
+
+    body {
+      transition: background 0.6s ease, color 0.4s ease;
+    }
+    :root.dark body {
+      background: linear-gradient(135deg, #1e1b16 0%, #0f0d0a 50%, #000000 100%);
+      color: #fde68a;
+    }
+    
+    :root.dark body::before {
+      background: radial-gradient(circle at 20% 30%, rgba(245, 158, 11, 0.15) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 70%, rgba(234, 88, 12, 0.1) 0%, transparent 50%);
+    }
+    
+    :root.dark header {
+      background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, transparent 100%);
+    }
+    
+    :root.dark h1 {
+      color: #fef3c7;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    }
+    
+    :root.dark .card {
+      background: linear-gradient(180deg, #1c1917 0%, #1a1614 100%);
+      border-color: rgba(245, 158, 11, 0.2);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5),
+                  0 0 0 1px rgba(245, 158, 11, 0.1);
+    }
+    
+    :root.dark .card::before {
+      background: linear-gradient(90deg, #f59e0b, #ea580c, #dc2626);
+    }
+    
+    :root.dark .theme-switch,
+    :root.dark .lang-switch,
+    :root.dark .btn-secondary {
+      background: rgba(28, 25, 23, 0.6);
+      border-color: rgba(245, 158, 11, 0.3);
+      color: #fef3c7;
+    }
+    
+    :root.dark .theme-switch:hover,
+    :root.dark .lang-switch:hover,
+    :root.dark .btn-secondary:hover {
+      background: rgba(28, 25, 23, 0.8);
+      border-color: #f59e0b;
+      color: #fbbf24;
+    }
+    
+    :root.dark .section-title {
+      color: #fef3c7;
+    }
+    
+    :root.dark .section-title i {
+      background: linear-gradient(135deg, #f59e0b, #ea580c);
+      color: #fff;
+    }
+    
+    :root.dark .section-subtitle {
+      color: #fb923c;
+      background: rgba(251, 146, 60, 0.12);
+    }
+    
+    :root.dark input,
+    :root.dark select {
+      background: rgba(28, 25, 23, 0.6);
+      border-color: rgba(245, 158, 11, 0.3);
+      color: #fef3c7;
+    }
+    
+    :root.dark input::placeholder {
+      color: #fcd34d;
+      opacity: 0.6;
+    }
+    
+    :root.dark input:hover,
+    :root.dark select:hover {
+      border-color: rgba(245, 158, 11, 0.4);
+      background: rgba(28, 25, 23, 0.7);
+    }
+    
+    :root.dark input:focus,
+    :root.dark select:focus {
+      background: rgba(28, 25, 23, 0.8);
+      border-color: #f59e0b;
+    }
+    
+    :root.dark label {
+      color: #fef3c7;
+    }
+    
+    :root.dark .app-footer {
+      background: linear-gradient(135deg, #44403c, #292524);
+      color: #fef3c7;
+    }
+    
+    :root.dark .footer-contact a,
+    :root.dark .footer-social a {
+      background: rgba(245, 158, 11, 0.15);
+      color: #fbbf24;
+      border-color: rgba(245, 158, 11, 0.3);
+    }
+    
+    :root.dark .footer-contact a:hover,
+    :root.dark .footer-social a:hover {
+      background: #f59e0b;
+      color: #1c1917;
+    }
+    .field-wrapper {
+      position: relative;
+    }
+    
+    .field-error {
+      color: #dc2626;
+      font-size: 0.85rem;
+      margin-top: 0.3rem;
+      display: none;
+      align-items: center;
+      gap: 0.3rem;
+      font-weight: 600;
+      animation: shake 0.4s ease;
+    }
+    
+    .field-error.visible {
+      display: flex;
+    }
+    
+    .field-error i {
+      font-size: 0.9rem;
+    }
+    
+    input.invalid,
+    select.invalid {
+      border-color: #dc2626 !important;
+      background: rgba(220, 38, 38, 0.05) !important;
+      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15) !important;
+    }
+    
+    input.valid,
+    select.valid {
+      border-color: #16a34a !important;
+      background: rgba(22, 163, 74, 0.05) !important;
+      box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.15) !important;
+    }
+    
+    :root.dark input.invalid,
+    :root.dark select.invalid {
+      background: rgba(220, 38, 38, 0.1) !important;
+    }
+    
+    :root.dark input.valid,
+    :root.dark select.valid {
+      background: rgba(22, 163, 74, 0.1) !important;
+    }
+    
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .field-success-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #16a34a;
+      font-size: 1rem;
+      display: none;
+    }
+    
+    html[dir="rtl"] .field-success-icon {
+      left: auto;
+      right: 12px;
+    }
+    
+    .field-success-icon.visible {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    /* تحسين زر الإرسال */
+    #saveBtn {
+      position: relative;
+      overflow: hidden;
+    }
+    
+    #saveBtn.loading {
+      pointer-events: none;
+      opacity: 0.7;
+    }
+    
+    #saveBtn.loading::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border: 2px solid transparent;
+      border-top-color: currentColor;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-right: 8px;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* تحسين حقل الموقع */
+    #coords.has-location {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.15), rgba(34, 197, 94, 0.08)) !important;
+      border-color: #22c55e !important;
+      cursor: pointer;
+      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.1);
+    }
+    
+    #coords.has-location:hover {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.12)) !important;
+      transform: translateY(-1px);
+    }
+    
+    /* رسائل التحقق مع أيقونات محسّنة */
+    .field-error i {
+      font-size: 1rem;
+      animation: shake 0.4s ease;
+    }
+    
+    /* تحسين رسائل الحالة */
+    .pill.warning {
+      color: #92400e;
+      border-color: #f59e0b;
+      background: rgba(245, 158, 11, 0.18);
+    }
+    
+    .pill.info {
+      color: #1e40af;
+      border-color: #3b82f6;
+      background: rgba(59, 130, 246, 0.18);
+    }
+
+</style>
+  
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f2c94c">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1f2937">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+</head>
+<body>
+
+  <header>
+    
+    <div class="header-content" style="flex-direction: column; gap: 0.4rem; text-align:center;">
+      <i class="fas fa-bus bus-icon"></i>
+      <h1>
+        تحديد موقع الطالب/ ـة
+        <span class="build-tag"></span>
+      </h1>
+    </div>
+
+  </header>
+
+  <main class="container">
+    <section class="card" aria-label="نموذج تحديد الموقع">
+      <div class="switch-group">
+        <button id="langToggle" class="lang-switch" type="button" title="تبديل اللغة" aria-label="تبديل اللغة">
+          <i class="fas fa-globe"></i> <span id="btnLangText">العربية / English</span>
+        </button>
+        <button id="themeToggle" class="theme-switch" type="button" title="تبديل الوضع" aria-label="تبديل الوضع">
+          <i id="themeIcon" class="fas fa-moon"></i> <span id="btnThemeText">تبديل</span>
+        </button>
+        <button type="button" id="helpBtn" class="btn-secondary" aria-label="تعليمات">
+          <i class="fas fa-question-circle"></i><span id="btnHelpText">تعليمات</span>
+        </button>
+      </div>
+
+      <div class="card-body">
+        <div class="section-title-wrap">
+          <h2 class="section-title">
+            <i class="fas fa-user-graduate"></i>
+            <span id="formTitle">نموذج إدخال بيانات</span>
+          </h2>
+          <p class="section-subtitle" id="formSubtitle">يرجى تعبئة البيانات ثم تحديد الموقع قبل الإرسال</p>
+        </div>
+
+        <div class="row">
+          <div class="field-wrapper">
+            <label for="studentName" class="required">اسم الطالب/ ـة</label>
+            <input id="studentName" placeholder="مثال: محمد أحمد" autocomplete="name" minlength="3" />
+            <span class="field-error" id="studentNameError"><i class="fas fa-exclamation-circle"></i> <span></span></span>
+          </div>
+          <div class="field-wrapper">
+            <label for="gradeLevel" class="required">المرحلة الدراسية</label>
+            <select id="gradeLevel"></select>
+            <span class="field-error" id="gradeLevelError"><i class="fas fa-exclamation-circle"></i> <span></span></span>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="field-wrapper">
+            <label for="contactNumber" class="required">رقم التواصل</label>
+            <input id="contactNumber" inputmode="tel" placeholder="05XXXXXXXX" autocomplete="tel" maxlength="10" />
+            <span class="field-error" id="contactNumberError"><i class="fas fa-exclamation-circle"></i> <span></span></span>
+            <div class="hint" id="phoneHint"><i class="fas fa-circle-info"></i> يرجى إدخال رقم الجوال بصيغة صحيحة.</div>
+          </div>
+          <div class="field-wrapper">
+            <label for="schoolName" class="required">اسم المدرسة</label>
+            <select id="schoolName"></select>
+            <span class="field-error" id="schoolNameError"><i class="fas fa-exclamation-circle"></i> <span></span></span>
+            <div id="otherSchoolContainer" class="other-district-container">
+              <input type="text" id="otherSchool" placeholder="أدخل اسم المدرسة" minlength="2" />
+              <span class="field-error" id="otherSchoolError"><i class="fas fa-exclamation-circle"></i> <span></span></span>
+            </div>
+            <div class="hint" id="schoolsHint"><i class="fas fa-circle-info"></i> اختر اسم المدرسة من القائمة.</div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="field-wrapper">
+            <label for="district" class="required">الحي</label>
+            <select id="district"></select>
+            <span class="field-error" id="districtError"><i class="fas fa-exclamation-circle"></i> <span></span></span>
+            <div id="otherDistrictContainer" class="other-district-container">
+              <input type="text" id="otherDistrict" placeholder="أدخل اسم الحي" minlength="2" />
+              <span class="field-error" id="otherDistrictError"><i class="fas fa-exclamation-circle"></i> <span></span></span>
+            </div>
+          </div>
+          <div class="field-wrapper">
+            <label for="coords" class="required">الموقع الحالي (GPS)</label>
+            <input id="coords" class="coords-field" readonly placeholder="اضغط (تحديد الموقع الحالي) للحصول على الإحداثيات" title="سيتم عرض الإحداثيات هنا بعد تحديد الموقع" />
+            <span class="field-error" id="coordsError"><i class="fas fa-exclamation-circle"></i> <span></span></span>
+            <div class="hint" id="locationHint"><i class="fas fa-circle-info"></i> يجب تحديد الموقع قبل إرسال البيانات.</div>
+          </div>
+        </div>
+
+        <div class="sp">
+          <div class="toolbar">
+            <button class="btn" id="saveBtn" aria-label="إرسال البيانات"><i class="fas fa-paper-plane"></i> <span id="btnSaveText">إرسال البيانات</span></button>
+            <button class="btn secondary" id="locateBtn" type="button" aria-label="تحديد الموقع الحالي"><i class="fas fa-location-dot"></i> <span id="btnLocateText">تحديد الموقع الحالي</span></button>
+            <button class="btn secondary" id="resetBtn" type="button" aria-label="إعادة تعيين"><i class="fas fa-rotate-right"></i> <span id="btnResetText">إعادة تعيين</span></button>
+          </div>
+          <span id="status" class="pill"><i class="fas fa-circle-info"></i> املأ جميع الحقول المطلوبة</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="successOverlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="successTitle">
+    <div class="box">
+      <h3 id="successTitle"><i class="fas fa-circle-check"></i> <span class="thanks"></span></h3>
+      <p class="line1"></p>
+      <div class="brand"><i class="fa-solid fa-bus"></i> <span class="brandText"></span></div>
+      <div class="contact-box">
+        <p><i class="fas fa-phone"></i> +966550463371</p>
+        <p><i class="fas fa-envelope"></i> albalawiaa@seitco.com.sa</p>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn secondary" id="newRecord">
+          <i class="fas fa-plus"></i> <span id="newRecordText">تسجيل جديد</span>
+        </button>
+        <button type="button" class="btn" id="closeSuccess">
+          <i class="fas fa-times"></i> <span id="closeSuccessText">إغلاق</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="helpModal" class="modal" aria-hidden="true">
+    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+      <div class="modal-header">
+        <div class="modal-header-icon">
+          <i class="fas fa-circle-question"></i>
+        </div>
+        <h2 id="helpTitle" class="modal-title" data-i18n="title">تعليمات الاستخدام</h2>
+        <button class="close" id="closeHelp" aria-label="إغلاق"><i class="fas fa-times"></i></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="tabs">
+          <button class="tab-btn tab-active" data-tab="howto" data-i18n="tab_howto">
+            <i class="fas fa-list-check"></i> <span>طريقة الاستخدام</span>
+          </button>
+          <button class="tab-btn" data-tab="faq" data-i18n="tab_faq">
+            <i class="fas fa-circle-question"></i> <span>الأسئلة الشائعة</span>
+          </button>
+          <button class="tab-btn" data-tab="tips" data-i18n="tab_tips">
+            <i class="fas fa-lightbulb"></i> <span>نصائح</span>
+          </button>
+        </div>
+
+        <div class="tab-panel" data-panel="howto">
+          <ul id="howtoList" class="help-list"></ul>
+        </div>
+
+        <div class="tab-panel" data-panel="faq" style="display:none;">
+          <div id="faqList"></div>
+        </div>
+
+        <div class="tab-panel" data-panel="tips" style="display:none;">
+          <div id="tipsList"></div>
+          <div class="help-contact" id="helpContact"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <footer class="app-footer">
+    <p class="footer-rights">
+      نظام تحديد موقع الطالب - جميع الحقوق محفوظة © 2025
+    </p>
+    <div class="footer-contact">
+      <a href="mailto:albalawiaa@seitco.com.sa" title="البريد"><i class="fas fa-envelope"></i></a>
+      <a href="tel:+966550463371" title="الهاتف"><i class="fas fa-phone"></i></a>
+    </div>
+    <div class="footer-social">
+      <a href="https://wa.me/966550463371" target="_blank" title="واتساب"><i class="fab fa-whatsapp"></i></a>
+      <a href="https://maps.app.goo.gl/hSaoMcRPdhV5LbQ97" target="_blank" title="الموقع"><i class="fas fa-location-dot"></i></a>
+    </div>
+  
+    <p class="footer-dev">تم التطوير بواسطة عبدالله البلوي</p>
+
+</footer>
+
+
+  <button id="backToTop" title="العودة لأعلى"><i class="fas fa-arrow-up"></i></button>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  
+  <script>
+    // ... (جميع دوال الجافاسكريبت السابقة تبقى كما هي بدون تغيير)
+    // تم إزالة محتوى الجافاسكريبت للإيجاز ولكن يجب أن يبقى كما هو في الإصدار السابق
+  
+    const $ = (s)=>document.querySelector(s);
+    const STRINGS = {
+      ar: { 
+        app_title: "تحديد موقع الطالب/ ـة", 
+        section_student_info: "نموذج إدخال بيانات", 
+        section_student_subtitle: "يرجى تعبئة البيانات ثم تحديد الموقع قبل الإرسال",
+        studentName_label: "اسم الطالب/ ـة", 
+        gradeLevel_label: "المرحلة الدراسية",
+        contactNumber_label: "رقم التواصل", 
+        schoolName_label: "اسم المدرسة",
+        district_label: "الحي", 
+        coords_label: "الموقع الحالي (GPS)",
+        coords_placeholder: "اضغط (تحديد الموقع الحالي) للحصول على الإحداثيات",
+        hint_phone: "يرجى إدخال رقم الجوال بصيغة صحيحة.",
+        hint_schools_default: "اكتب جزءًا من الاسم لعرض الاقتراحات.",
+        btn_save: "إرسال البيانات", 
+        btn_locate: "تحديد الموقع الحالي", 
+        btn_reset: "إعادة تعيين",
+        status_ready: "جاهز للإرسال", 
+        status_fill_required: "املأ جميع الحقول المطلوبة",
+        geo_not_supported: "المتصفح لا يدعم تحديد الموقع", 
+        locating: "جارٍ تحديد الموقع...",
+        located_ok: "تم تحديد الموقع ووضع الإحداثيات في الحقل",
+        locate_error: "تعذر تحديد موقعك. تأكد من تفعيل خدمة الموقع",
+        gas_not_set: "لم يتم ضبط رابط GAS.", 
+        load_ok: (n)=> `تم تحميل ${n} عنصرًا.`,
+        load_none: "لا توجد بيانات.", 
+        load_fail: "تعذّر تحميل البيانات",
+        save_check_only: "تم التحقق من البيانات (الإرسال إلى GAS غير مفعّل).",
+        saving: "جارٍ الإرسال...", 
+        saved: "تم الإرسال بنجاح", 
+        save_failed: "فشل في الإرسال",
+        reset_done: "تمت إعادة التعيين", 
+        ping_ok: (m)=> `اتصال ناجح: ${m || 'OK'}`,
+        ping_bad: "الاتصال تم لكن الاستجابة غير صحيحة.", 
+        ping_fail: "تعذر الاتصال بـ GAS",
+        location_required: "يجب تحديد الموقع قبل الإرسال",
+        err_name_required: "يرجى إدخال اسم الطالب",
+        err_name_invalid: "الاسم يجب أن يحتوي على حروف فقط (3 أحرف على الأقل)",
+        err_grade_required: "يرجى اختيار المرحلة الدراسية",
+        err_phone_required: "يرجى إدخال رقم الجوال",
+        err_phone_invalid: "رقم الجوال غير صحيح (يجب أن يبدأ بـ 05 ويتكون من 10 أرقام)",
+        err_school_required: "يرجى اختيار المدرسة",
+        err_other_school_required: "يرجى إدخال اسم المدرسة",
+        err_district_required: "يرجى اختيار الحي",
+        err_other_district_required: "يرجى إدخال اسم الحي",
+        err_location_required: "يرجى تحديد الموقع أولاً",
+        success_thanks: "شكراً لكم، نسعد بخدمتكم",
+        success_line1: "الشركة السعودية الإماراتية للنقل المتكامل",
+        success_brand: "مشروع النقل المدرسي بالعلا",
+        footer_rights: "نظام تحديد موقع الطالب - جميع الحقوق محفوظة © 2025",
+        footer_contact: "للتواصل", 
+        btn_help: "تعليمات", 
+        btn_theme: "تبديل", 
+        btn_lang_label: "العربية / English", 
+        btn_ok: "حسنًا",
+        new_record: "تسجيل جديد",
+        close: "إغلاق",
+        other_school_placeholder: "أدخل اسم المدرسة",
+        other_district_placeholder: "أدخل اسم الحي"
+      },
+      en: { 
+        app_title: "Student Location", 
+        section_student_info: "Student Information", 
+        section_student_subtitle: "Please fill the fields then capture location before submitting",
+        studentName_label: "Student Name", 
+        gradeLevel_label: "Grade Level",
+        contactNumber_label: "Contact Number", 
+        schoolName_label: "School Name",
+        district_label: "District", 
+        coords_label: "Current Location (GPS)",
+        coords_placeholder: "Click (Get Current Location) to obtain coordinates",
+        hint_phone: "Please enter a valid mobile number.",
+        hint_schools_default: "Type part of the name to see suggestions.",
+        btn_save: "Send Data", 
+        btn_locate: "Get Current Location", 
+        btn_reset: "Reset",
+        status_ready: "Ready to send", 
+        status_fill_required: "Please fill all required fields",
+        geo_not_supported: "Geolocation is not supported", 
+        locating: "Locating...",
+        located_ok: "Location detected and coordinates set",
+        locate_error: "Unable to detect your location. Please enable location services",
+        gas_not_set: "GAS endpoint is not configured.", 
+        load_ok: (n)=> `Loaded ${n} items.`,
+        load_none: "No data found.", 
+        load_fail: "Failed to load data",
+        save_check_only: "Data validated (GAS send is disabled).", 
+        saving: "Sending...",
+        saved: "Sent successfully", 
+        save_failed: "Send failed", 
+        reset_done: "Form reset",
+        ping_ok: (m)=> `Connection OK: ${m || 'OK'}`, 
+        ping_bad: "Connected but response invalid.",
+        ping_fail: "Failed to reach GAS",
+        location_required: "Location is required before sending",
+        err_name_required: "Please enter student name",
+        err_name_invalid: "Name must contain letters only (at least 3 characters)",
+        err_grade_required: "Please select grade level",
+        err_phone_required: "Please enter phone number",
+        err_phone_invalid: "Invalid phone number (must start with 05 and be 10 digits)",
+        err_school_required: "Please select a school",
+        err_other_school_required: "Please enter school name",
+        err_district_required: "Please select a district",
+        err_other_district_required: "Please enter district name",
+        err_location_required: "Please set location first",
+        success_thanks: "Thank you — We're happy to serve you",
+        success_line1: "Saudi–Emirati Integrated Transport Company",
+        success_brand: "AlUla School Transport Project",
+        footer_rights: "Student Location System — All rights reserved © 2025",
+        footer_contact: "Contact", 
+        btn_help: "Help", 
+        btn_theme: "Toggle", 
+        btn_lang_label: "English / العربية", 
+        btn_ok: "OK",
+        new_record: "New Record",
+        close: "Close",
+        other_school_placeholder: "Enter school name",
+        other_district_placeholder: "Enter district name"
+      }
+    };
+
+    let currentLang = localStorage.getItem("lang") || "ar";
+    function setDirByLang(lang){ 
+      const root=document.documentElement; 
+      root.lang=lang; 
+      root.dir=(lang==='ar'?'rtl':'ltr'); 
+    }
+
+    const gradeLevels = [
+      { value: "", label_ar: "اختر المرحلة", label_en: "Select grade", disabled: true },
+      { value: "elem", label_ar: "الابتدائية", label_en: "Elementary" },
+      { value: "inter", label_ar: "المتوسطة", label_en: "Intermediate" },
+      { value: "sec", label_ar: "الثانوية", label_en: "Secondary" }
+    ];
+
+    function updateGradeLevels(lang){
+      const sel = document.getElementById("gradeLevel");
+      const prev = sel.value;
+      sel.innerHTML = gradeLevels.map(g => {
+        const lbl = (lang==='ar') ? g.label_ar : g.label_en;
+        const attrs = [`value="${g.value}"`, g.disabled ? "disabled selected" : ""].join(" ").trim();
+        return `<option ${attrs}>${lbl}</option>`;
+      }).join("");
+      if (gradeLevels.some(g => g.value === prev)) sel.value = prev;
+    }
+
+    const GAS_ENDPOINT = "https://script.google.com/macros/s/AKfycbyYYXcnfLBhM4fbV0ofXSOQS3D7TR1Xaft8sCha7Qrl2ShIh6sk2NmyLoX-CNGJlkRuBw/exec";
+
+    let schoolsBilingual = [];
+    let districtsBilingual = [];
+
+    const FALLBACK_SCHOOLS = [
+      { ar: "ابتدائية العلا الأولى", en: "AlUla Elementary 1" },
+      { ar: "متوسطة العلا", en: "AlUla Intermediate" },
+      { ar: "ثانوية العلا", en: "AlUla Secondary" }
+    ];
+
+    const FALLBACK_DISTRICTS = [
+      { code: "D01", ar: "العذيب", en: "Al-Adheeb" },
+      { code: "D02", ar: "مغيراء", en: "Mughayra" },
+      { code: "D03", ar: "العقير", en: "Al-Uqayr" }
+    ];
+
+    function updateSchoolsSelect(lang){
+      const sel = document.getElementById("schoolName");
+      if(!sel) return;
+      const prev = sel.value;
+      const placeholder = (lang==='ar') ? "اختر المدرسة" : "Select school";
+      const names = (lang==='ar') ? schoolsBilingual.map(s=>s.ar) : schoolsBilingual.map(s=>s.en || s.ar);
+
+      const options = ['<option value="" disabled selected>'+placeholder+'</option>']
+        .concat(
+          names.filter(Boolean).map(n => {
+            const val = String(n).replace(/"/g,'&quot;');
+            const label = String(n).replace(/</g,'&lt;');
+            return '<option value="'+val+'">'+label+'</option>';
+          })
+        );
+
+      options.push((lang==='ar')
+        ? '<option value="other">أخرى (حدد اسم المدرسة)</option>'
+        : '<option value="other">Other (specify)</option>'
+      );
+
+      sel.innerHTML = options.join("");
+      if (names.includes(prev)) sel.value = prev;
+    }
+
+    function updateDistricts(lang){
+      const sel = document.getElementById("district");
+      const prev = sel.value;
+      const opts = (lang==='ar')
+        ? [{code:"", label:"اختر الحي", disabled:true}].concat(districtsBilingual.map(d => ({code:d.code, label:d.ar||d.code}))).concat([{code:"other", label:"أخرى (حدد اسم الحي)"}])
+        : [{code:"", label:"Select district", disabled:true}].concat(districtsBilingual.map(d => ({code:d.code, label:d.en||d.code}))).concat([{code:"other", label:"Other (specify)"}]);
+      sel.innerHTML = opts.map(o => {
+        const attrs = [`value="${o.code}"`, o.disabled ? "disabled selected" : ""].join(" ").trim();
+        return `<option ${attrs}>${o.label}</option>`;
+      }).join("");
+      if (opts.some(o => o.code === prev)) sel.value = prev;
+    }
+
+    async function fetchBilingualSchools(){
+      if (!GAS_ENDPOINT || GAS_ENDPOINT.includes("PUT_YOUR_GAS_WEBAPP_URL_HERE")) return [];
+      try {
+        const res = await fetch(GAS_ENDPOINT, { method:"POST", body: JSON.stringify({ action:"list_schools_bilingual" }) });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        if (!data?.ok || !Array.isArray(data.schools)) throw new Error("Invalid schools payload");
+        return data.schools.map(s => ({ ar: s.ar || "", en: s.en || "" }));
+      } catch(e){
+        console.warn("Schools fetch failed, using fallback.", e);
+        return FALLBACK_SCHOOLS;
+      }
+    }
+
+    async function fetchBilingualDistricts(){
+      if (!GAS_ENDPOINT || GAS_ENDPOINT.includes("PUT_YOUR_GAS_WEBAPP_URL_HERE")) return [];
+      try {
+        const res = await fetch(GAS_ENDPOINT, { method:"POST", body: JSON.stringify({ action:"list_districts_bilingual" }) });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        if (!data?.ok || !Array.isArray(data.districts)) throw new Error("Invalid districts payload");
+        return data.districts.map(d => ({ code: d.code || d.value || "", ar: d.ar || d.label_ar || "", en: d.en || d.label_en || "" }));
+      } catch(e){
+        console.warn("Districts fetch failed, using fallback.", e);
+        return FALLBACK_DISTRICTS;
+      }
+    }
+
+    async function ensureDataLoaded(){
+      const S = STRINGS[currentLang];
+      const hint = document.getElementById("schoolsHint");
+      try{
+        const now = Date.now();
+        const cache = JSON.parse(localStorage.getItem("bilingual_cache") || "{}");
+        if (cache.timestamp && (now - cache.timestamp) < 12*60*60*1000 && Array.isArray(cache.schools) && Array.isArray(cache.districts)){
+          schoolsBilingual = cache.schools; 
+          districtsBilingual = cache.districts;
+        } else {
+          const [sch, dis] = await Promise.all([fetchBilingualSchools(), fetchBilingualDistricts()]);
+          schoolsBilingual = sch; 
+          districtsBilingual = dis;
+          localStorage.setItem("bilingual_cache", JSON.stringify({ timestamp: now, schools: sch, districts: dis }));
+        }
+        updateSchoolsSelect(currentLang);
+        updateDistricts(currentLang);
+        if (hint){ 
+          const ic = hint.querySelector('i')?.outerHTML||''; 
+          const count = (schoolsBilingual?.length||0) + (districtsBilingual?.length||0); 
+          hint.innerHTML = `${ic} ${S.load_ok(count)}`; 
+        }
+      }catch(e){
+        console.error(e);
+        if (hint){ 
+          const ic = hint.querySelector('i')?.outerHTML||''; 
+          hint.innerHTML = `${ic} ${S.load_fail}: ${e.message}`; 
+        }
+      }
+    }
+
+    function setLang(lang){
+      currentLang = lang; 
+      localStorage.setItem("lang", lang); 
+      setDirByLang(lang);
+      const S = STRINGS[lang];
+      
+      // تحديث الهيدر
+      const headerH1=document.querySelector('header h1'); 
+      if(headerH1){ 
+        const bus=headerH1.querySelector('.bus-icon')?.outerHTML||''; 
+        headerH1.innerHTML=`${bus} ${S.app_title} <span class="build-tag"></span>`; 
+      }
+      
+      // تحديث عناصر النموذج
+      const st=document.getElementById('formTitle'); 
+      if(st){ st.textContent = S.section_student_info; }
+      
+      const sst=document.getElementById('formSubtitle'); 
+      if(sst){ sst.textContent = S.section_student_subtitle; }
+      
+      const setLabel=(fid,txt)=>{ 
+        const el=document.querySelector(`label[for="${fid}"]`); 
+        if(el) el.textContent=txt; 
+      };
+      
+      setLabel('studentName',S.studentName_label); 
+      setLabel('gradeLevel',S.gradeLevel_label);
+      setLabel('contactNumber',S.contactNumber_label); 
+      setLabel('schoolName',S.schoolName_label);
+      setLabel('district',S.district_label); 
+      setLabel('coords',S.coords_label);
+      
+      const withIcon=(id,text)=>{ 
+        const el=document.getElementById(id); 
+        if(el){ 
+          const ic=el.querySelector('i')?.outerHTML||''; 
+          const span=el.querySelector('span'); 
+          if(span){ span.textContent=text; } 
+          else { el.innerHTML=`${ic} ${text}`; } 
+        } 
+      };
+      
+      withIcon('saveBtn',S.btn_save); 
+      withIcon('locateBtn',S.btn_locate); 
+      withIcon('resetBtn',S.btn_reset);
+      
+      document.getElementById('saveBtn')?.setAttribute('aria-label', S.btn_save);
+      document.getElementById('locateBtn')?.setAttribute('aria-label', S.btn_locate);
+      document.getElementById('resetBtn')?.setAttribute('aria-label', S.btn_reset);
+      
+      const phoneHint=document.getElementById('phoneHint'); 
+      if(phoneHint){ 
+        const ic=phoneHint.querySelector('i')?.outerHTML||''; 
+        phoneHint.innerHTML=`${ic} ${S.hint_phone}`; 
+      }
+      
+      const schoolsHint=document.getElementById('schoolsHint'); 
+      if(schoolsHint){ 
+        const ic=schoolsHint.querySelector('i')?.outerHTML||''; 
+        schoolsHint.innerHTML=`${ic} ${S.hint_schools_default}`; 
+      }
+      
+      const setPH=(id,txt)=>{ 
+        const el=document.getElementById(id); 
+        if(el) el.placeholder=txt; 
+      };
+      
+      setPH('studentName',lang==='ar'?'مثال: محمد أحمد':'e.g., Mohammed Ahmed');
+      setPH('coords', S.coords_placeholder);
+      
+      const contact=document.getElementById('contactNumber'); 
+      if(contact) contact.placeholder=(lang==='ar'?'05XXXXXXXX':'05XXXXXXXX');
+      
+      const status=document.getElementById('status'); 
+      if(status){ 
+        const ic=status.querySelector('i')?.outerHTML||''; 
+        status.innerHTML=`${ic} ${S.status_fill_required}`; 
+      }
+      
+      const langBtn=document.getElementById('langToggle'); 
+      if(langBtn){ 
+        const ic=langBtn.querySelector('i')?.outerHTML||'<i class="fas fa-globe"></i>'; 
+        langBtn.innerHTML = ic + ' ' + `<span id="btnLangText">${S.btn_lang_label}</span>`; 
+      }
+
+      // تحديث أزرار التحكم
+      const helpBtnText = document.getElementById('btnHelpText'); 
+      if(helpBtnText){ helpBtnText.textContent = S.btn_help; }
+      
+      const themeBtnText = document.getElementById('btnThemeText'); 
+      if(themeBtnText){ themeBtnText.textContent = S.btn_theme; }
+      
+      const langBtnText = document.getElementById('btnLangText'); 
+      if(langBtnText){ langBtnText.textContent = S.btn_lang_label; }
+
+      const helpBtnEl = document.getElementById('helpBtn'); 
+      if(helpBtnEl){ helpBtnEl.setAttribute('aria-label', S.btn_help); }
+      
+      const themeBtnEl = document.getElementById('themeToggle'); 
+      if(themeBtnEl){ themeBtnEl.setAttribute('aria-label', S.btn_theme); }
+      
+      const langBtnEl = document.getElementById('langToggle'); 
+      if(langBtnEl){ langBtnEl.setAttribute('aria-label', S.btn_lang_label); }
+
+      // تحديث نافذة النجاح
+      const successTitle = document.getElementById('successTitle');
+      if(successTitle) {
+        const icon = successTitle.querySelector('i')?.outerHTML || '';
+        successTitle.innerHTML = `${icon} <span class="thanks">${S.success_thanks}</span>`;
+      }
+
+      const line1 = document.querySelector('.line1');
+      if(line1) line1.textContent = S.success_line1;
+
+      const brandText = document.querySelector('.brandText');
+      if(brandText) brandText.textContent = S.success_brand;
+
+      const newRecordBtn = document.getElementById('newRecord');
+      if(newRecordBtn) {
+        const icon = newRecordBtn.querySelector('i')?.outerHTML || '';
+        newRecordBtn.innerHTML = `${icon} <span id="newRecordText">${S.new_record}</span>`;
+      }
+
+      const closeSuccessBtn = document.getElementById('closeSuccess');
+      if(closeSuccessBtn) {
+        const icon = closeSuccessBtn.querySelector('i')?.outerHTML || '';
+        closeSuccessBtn.innerHTML = `${icon} <span id="closeSuccessText">${S.close}</span>`;
+      }
+
+      // تحديث أماكن الإدخال الإضافية
+      const otherSchoolInput = document.getElementById('otherSchool');
+      if(otherSchoolInput) {
+        otherSchoolInput.placeholder = S.other_school_placeholder;
+      }
+
+      const otherDistrictInput = document.getElementById('otherDistrict');
+      if(otherDistrictInput) {
+        otherDistrictInput.placeholder = S.other_district_placeholder;
+      }
+
+      // تحديث الفوتر
+      const fr = document.getElementById('footerRights'); 
+      if(fr){ fr.textContent = S.footer_rights; }
+      
+      const mapTxt = document.getElementById('footerMapTxt');
+      if(mapTxt){ mapTxt.textContent = (lang === 'ar' ? 'الموقع' : 'Map'); }
+      
+      const waTxt = document.getElementById('footerWhatsTxt');
+      if(waTxt){ waTxt.textContent = (lang === 'ar' ? 'واتساب' : 'WhatsApp'); }
+
+      const emailTxt = document.getElementById('footerEmailTxt');
+      if(emailTxt){ emailTxt.textContent = (lang === 'ar' ? 'البريد الإلكتروني' : 'Email'); }
+      
+      const phoneTxt = document.getElementById('footerPhoneTxt');
+      if(phoneTxt){ phoneTxt.textContent = (lang === 'ar' ? 'الهاتف' : 'Phone'); }
+
+      updateGradeLevels(lang);
+      updateSchoolsSelect(lang);
+      updateDistricts(lang);
+
+      try { renderHelp(lang); } catch(_){}
+    }
+
+    function toggleLang(){ 
+      const newLang = currentLang === 'ar' ? 'en' : 'ar';
+      setLang(newLang);
+      // إطلاق حدث لتحديث Select2
+      $(document).trigger('languageChanged');
+    }
+
+    function showToastLikeStatus(message, type="default"){
+      const status=document.getElementById("status"); 
+      if(!status) return;
+      status.textContent=message; 
+      status.className="pill";
+      if(type==="success"){ 
+        status.innerHTML=`<i class="fas fa-check-circle"></i> ${message}`; 
+        status.classList.add("success"); 
+      }
+      else if(type==="error"){ 
+        status.innerHTML=`<i class="fas fa-exclamation-circle"></i> ${message}`; 
+        status.classList.add("error"); 
+      }
+      else if(type==="warning"){ 
+        status.innerHTML=`<i class="fas fa-exclamation-triangle"></i> ${message}`; 
+        status.classList.add("warning"); 
+      }
+      else if(type==="info"){ 
+        status.innerHTML=`<i class="fas fa-info-circle"></i> ${message}`; 
+        status.classList.add("info"); 
+      }
+      else{ 
+        status.innerHTML=`<i class="fas fa-info-circle"></i> ${message}`; 
+      }
+    }
+
+    function isValidSaudiMobile(phone){ 
+      const cleaned=phone.replace(/\D/g,''); 
+      return /^(05|5)(5|0|3|6|4|9|1|8|7|2)([0-9]{7})$/.test(cleaned); 
+    }
+
+    function isValidName(name){
+      // التحقق من أن الاسم يحتوي على حروف عربية أو إنجليزية فقط ومسافات
+      const cleaned = name.trim();
+      if(cleaned.length < 3) return false;
+      return /^[\u0600-\u06FFa-zA-Z\s]+$/.test(cleaned);
+    }
+
+    // دوال التحقق من كل حقل
+    function showFieldError(fieldId, message){
+      const field = document.getElementById(fieldId);
+      const errorEl = document.getElementById(fieldId + 'Error');
+      if(field){
+        field.classList.add('invalid');
+        field.classList.remove('valid');
+      }
+      if(errorEl){
+        const spanEl = errorEl.querySelector('span');
+        if(spanEl) spanEl.textContent = message;
+        errorEl.classList.add('visible');
+      }
+    }
+
+    function clearFieldError(fieldId){
+      const field = document.getElementById(fieldId);
+      const errorEl = document.getElementById(fieldId + 'Error');
+      if(field){
+        field.classList.remove('invalid');
+      }
+      if(errorEl){
+        errorEl.classList.remove('visible');
+      }
+    }
+
+    function setFieldValid(fieldId){
+      const field = document.getElementById(fieldId);
+      const errorEl = document.getElementById(fieldId + 'Error');
+      if(field){
+        field.classList.remove('invalid');
+        field.classList.add('valid');
+      }
+      if(errorEl){
+        errorEl.classList.remove('visible');
+      }
+    }
+
+    function validateStudentName(){
+      const S = STRINGS[currentLang];
+      const name = document.getElementById('studentName').value.trim();
+      if(!name){
+        showFieldError('studentName', S.err_name_required);
+        return false;
+      }
+      if(!isValidName(name)){
+        showFieldError('studentName', S.err_name_invalid);
+        return false;
+      }
+      setFieldValid('studentName');
+      return true;
+    }
+
+    function validateGradeLevel(){
+      const S = STRINGS[currentLang];
+      const grade = document.getElementById('gradeLevel').value;
+      if(!grade){
+        showFieldError('gradeLevel', S.err_grade_required);
+        return false;
+      }
+      setFieldValid('gradeLevel');
+      return true;
+    }
+
+    function validateContactNumber(){
+      const S = STRINGS[currentLang];
+      const phone = document.getElementById('contactNumber').value.trim();
+      if(!phone){
+        showFieldError('contactNumber', S.err_phone_required);
+        return false;
+      }
+      if(!isValidSaudiMobile(phone)){
+        showFieldError('contactNumber', S.err_phone_invalid);
+        return false;
+      }
+      setFieldValid('contactNumber');
+      return true;
+    }
+
+    function validateSchool(){
+      const S = STRINGS[currentLang];
+      const school = document.getElementById('schoolName').value;
+      const otherSchool = document.getElementById('otherSchool')?.value.trim() || '';
+      
+      if(!school){
+        showFieldError('schoolName', S.err_school_required);
+        return false;
+      }
+      if(school === 'other' && !otherSchool){
+        clearFieldError('schoolName');
+        showFieldError('otherSchool', S.err_other_school_required);
+        return false;
+      }
+      clearFieldError('otherSchool');
+      setFieldValid('schoolName');
+      return true;
+    }
+
+    function validateDistrict(){
+      const S = STRINGS[currentLang];
+      const district = document.getElementById('district').value;
+      const otherDistrict = document.getElementById('otherDistrict')?.value.trim() || '';
+      
+      if(!district){
+        showFieldError('district', S.err_district_required);
+        return false;
+      }
+      if(district === 'other' && !otherDistrict){
+        clearFieldError('district');
+        showFieldError('otherDistrict', S.err_other_district_required);
+        return false;
+      }
+      clearFieldError('otherDistrict');
+      setFieldValid('district');
+      return true;
+    }
+
+    function validateLocation(){
+      const S = STRINGS[currentLang];
+      const coords = document.getElementById('coords').value;
+      if(!coords){
+        showFieldError('coords', S.err_location_required);
+        return false;
+      }
+      setFieldValid('coords');
+      document.getElementById('coords').classList.add('has-location');
+      return true;
+    }
+
+    function showSuccessFrame(){
+      const overlay = document.getElementById("successOverlay");
+      const S = STRINGS[currentLang];
+      overlay.querySelector(".thanks").textContent = S.success_thanks;
+      overlay.querySelector(".line1").textContent = S.success_line1;
+      overlay.querySelector(".brandText").textContent = S.success_brand;
+
+      const card = document.querySelector(".card");
+      if (card) card.classList.add("hidden");
+
+      overlay.classList.add("visible");
+    }
+
+    let lastLat=null, lastLng=null;
+    
+    function locateUserNoMap(){
+      const S=STRINGS[currentLang];
+      const locateBtn = document.getElementById("locateBtn");
+      
+      if(!navigator.geolocation){ 
+        showToastLikeStatus(S.geo_not_supported,"error");
+        showFieldError('coords', S.geo_not_supported);
+        return; 
+      }
+      
+      // تعطيل الزر أثناء التحديد
+      locateBtn.disabled = true;
+      locateBtn.querySelector('span').textContent = S.locating;
+      showToastLikeStatus(S.locating, "info");
+      clearFieldError('coords');
+      
+      navigator.geolocation.getCurrentPosition(pos=>{
+        const {latitude:lat, longitude:lng, accuracy}=pos.coords;
+        lastLat=lat; lastLng=lng;
+        const coordsText=`${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+        const input=document.getElementById("coords");
+        input.value=coordsText;
+        input.dataset.url=`https://www.google.com/maps?q=${lat.toFixed(6)},${lng.toFixed(6)}`;
+        input.classList.add('has-location');
+        setFieldValid('coords');
+        showToastLikeStatus(S.located_ok,"success"); 
+        updateSubmitButton();
+        
+        // استعادة الزر
+        locateBtn.disabled = false;
+        locateBtn.querySelector('span').textContent = S.btn_locate;
+      },err=>{ 
+        let errorMsg = S.locate_error;
+        switch(err.code){
+          case err.PERMISSION_DENIED:
+            errorMsg = currentLang === 'ar' ? 
+              "تم رفض إذن الموقع. يرجى السماح بالوصول للموقع من إعدادات المتصفح" : 
+              "Location permission denied. Please allow location access in browser settings";
+            break;
+          case err.POSITION_UNAVAILABLE:
+            errorMsg = currentLang === 'ar' ? 
+              "معلومات الموقع غير متاحة حالياً" : 
+              "Location information is unavailable";
+            break;
+          case err.TIMEOUT:
+            errorMsg = currentLang === 'ar' ? 
+              "انتهت مهلة تحديد الموقع. حاول مرة أخرى" : 
+              "Location request timed out. Please try again";
+            break;
+        }
+        showToastLikeStatus(errorMsg,"error");
+        showFieldError('coords', errorMsg);
+        console.error(err);
+        
+        // استعادة الزر
+        locateBtn.disabled = false;
+        locateBtn.querySelector('span').textContent = S.btn_locate;
+      },{enableHighAccuracy:true, timeout:15000, maximumAge:0});
+    }
+
+    function checkFormCompletion(){
+      const S = STRINGS[currentLang];
+      
+      // التحقق من كل حقل
+      const nameValid = validateStudentName();
+      const gradeValid = validateGradeLevel();
+      const phoneValid = validateContactNumber();
+      const schoolValid = validateSchool();
+      const districtValid = validateDistrict();
+      const locationValid = validateLocation();
+
+      const isComplete = nameValid && gradeValid && phoneValid && schoolValid && districtValid && locationValid;
+
+      const saveBtn = document.getElementById("saveBtn");
+      saveBtn.disabled = !isComplete;
+
+      if(isComplete){
+        saveBtn.classList.add("active");
+        showToastLikeStatus(S.status_ready, "success");
+      } else {
+        saveBtn.classList.remove("active");
+      }
+
+      return isComplete;
+    }
+
+    // التحقق في الوقت الحقيقي عند تغيير كل حقل
+    function setupRealTimeValidation(){
+      const studentName = document.getElementById('studentName');
+      const gradeLevel = document.getElementById('gradeLevel');
+      const contactNumber = document.getElementById('contactNumber');
+      const schoolName = document.getElementById('schoolName');
+      const district = document.getElementById('district');
+      const otherSchool = document.getElementById('otherSchool');
+      const otherDistrict = document.getElementById('otherDistrict');
+
+      // التحقق عند الإدخال
+      studentName?.addEventListener('input', function(){
+        if(this.value.trim()) validateStudentName();
+        else clearFieldError('studentName');
+        updateSubmitButton();
+      });
+
+      studentName?.addEventListener('blur', validateStudentName);
+
+      gradeLevel?.addEventListener('change', function(){
+        validateGradeLevel();
+        updateSubmitButton();
+      });
+
+      contactNumber?.addEventListener('input', function(){
+        // السماح فقط بالأرقام
+        this.value = this.value.replace(/[^\d]/g, '');
+        if(this.value.length >= 10) validateContactNumber();
+        else if(this.value.length > 0) clearFieldError('contactNumber');
+        updateSubmitButton();
+      });
+
+      contactNumber?.addEventListener('blur', validateContactNumber);
+
+      schoolName?.addEventListener('change', function(){
+        validateSchool();
+        if(this.value === 'other'){
+          document.getElementById('otherSchoolContainer').classList.add('visible');
+        } else {
+          document.getElementById('otherSchoolContainer').classList.remove('visible');
+        }
+        updateSubmitButton();
+      });
+
+      otherSchool?.addEventListener('input', function(){
+        if(document.getElementById('schoolName').value === 'other'){
+          if(this.value.trim()) clearFieldError('otherSchool');
+        }
+        updateSubmitButton();
+      });
+
+      otherSchool?.addEventListener('blur', function(){
+        if(document.getElementById('schoolName').value === 'other'){
+          validateSchool();
+        }
+      });
+
+      district?.addEventListener('change', function(){
+        validateDistrict();
+        if(this.value === 'other'){
+          document.getElementById('otherDistrictContainer').classList.add('visible');
+        } else {
+          document.getElementById('otherDistrictContainer').classList.remove('visible');
+        }
+        updateSubmitButton();
+      });
+
+      otherDistrict?.addEventListener('input', function(){
+        if(document.getElementById('district').value === 'other'){
+          if(this.value.trim()) clearFieldError('otherDistrict');
+        }
+        updateSubmitButton();
+      });
+
+      otherDistrict?.addEventListener('blur', function(){
+        if(document.getElementById('district').value === 'other'){
+          validateDistrict();
+        }
+      });
+    }
+
+    function updateSubmitButton(){
+      const S = STRINGS[currentLang];
+      const nameValid = document.getElementById('studentName').value.trim().length >= 3 && isValidName(document.getElementById('studentName').value);
+      const gradeValid = !!document.getElementById('gradeLevel').value;
+      const phoneValid = isValidSaudiMobile(document.getElementById('contactNumber').value);
+      const schoolVal = document.getElementById('schoolName').value;
+      const schoolValid = schoolVal && (schoolVal !== 'other' || document.getElementById('otherSchool')?.value.trim());
+      const districtVal = document.getElementById('district').value;
+      const districtValid = districtVal && (districtVal !== 'other' || document.getElementById('otherDistrict')?.value.trim());
+      const locationValid = !!document.getElementById('coords').value;
+
+      const isComplete = nameValid && gradeValid && phoneValid && schoolValid && districtValid && locationValid;
+      
+      const saveBtn = document.getElementById("saveBtn");
+      saveBtn.disabled = !isComplete;
+
+      if(isComplete){
+        saveBtn.classList.add("active");
+        showToastLikeStatus(S.status_ready, "success");
+      } else {
+        saveBtn.classList.remove("active");
+        showToastLikeStatus(S.status_fill_required, "info");
+      }
+    }
+
+    function validateForm(){
+      const S=STRINGS[currentLang];
+      let hasErrors = false;
+      
+      // التحقق من جميع الحقول وعرض جميع الأخطاء
+      if(!validateStudentName()) hasErrors = true;
+      if(!validateGradeLevel()) hasErrors = true;
+      if(!validateContactNumber()) hasErrors = true;
+      if(!validateSchool()) hasErrors = true;
+      if(!validateDistrict()) hasErrors = true;
+      if(!validateLocation()) hasErrors = true;
+      
+      if(hasErrors){
+        showToastLikeStatus(S.status_fill_required, "error");
+        // التمرير إلى أول حقل به خطأ
+        const firstError = document.querySelector('.invalid');
+        if(firstError){
+          firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          firstError.focus();
+        }
+        return false;
+      }
+      return true;
+    }
+
+    function buildRecord(){
+      const now = new Date();
+      const locale = (currentLang==='ar' ? 'ar-EG' : 'en-US');
+      const dateLocal = now.toLocaleDateString(locale);
+      const time12 = now.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit', hour12: true });
+
+      const gradeCode = document.getElementById("gradeLevel").value;
+      const gl = (["elem","inter","sec"].includes(gradeCode) ? ({"elem":0,"inter":1,"sec":2}[gradeCode]) : -1);
+      const gradeLabel = (gl>=0 ? (currentLang==='ar' ? ["الابتدائية","المتوسطة","الثانوية"][gl] : ["Elementary","Intermediate","Secondary"][gl]) : "");
+
+      const schoolLabel = document.getElementById("schoolName").value.trim();
+
+      const districtCode = document.getElementById("district").value;
+      let districtLabel = "";
+      if(districtCode === "other"){
+        districtLabel = (document.getElementById("otherDistrict").value || "").trim();
+      }else{
+        const d = districtsBilingual.find(x => x.code === districtCode);
+        districtLabel = d ? ((currentLang==='ar' ? d.ar : d.en) || d.code) : districtCode;
+      }
+
+      return {
+        dateLocal: dateLocal,
+        time12: time12,
+        timestamp: new Date().toISOString(),
+        lang: currentLang,
+        studentName: document.getElementById("studentName").value.trim(),
+        gradeLevel: gradeLabel,
+        gradeLevelCode: gradeCode,
+        contactNumber: document.getElementById("contactNumber").value.trim(),
+        schoolName: schoolLabel,
+        district: districtLabel,
+        districtCode: districtCode,
+        lat: lastLat, lng: lastLng,
+        mapsUrl: document.getElementById("coords").dataset.url || ""
+      };
+    }
+
+    async function saveRecord(){
+      const S=STRINGS[currentLang];
+      const saveBtn = document.getElementById("saveBtn");
+      
+      // منع الإرسال المتكرر
+      if(saveBtn.classList.contains('loading')) return;
+      
+      if(!validateForm()) return;
+      const record = buildRecord();
+
+      if (!GAS_ENDPOINT || GAS_ENDPOINT.includes("PUT_YOUR_GAS_WEBAPP_URL_HERE")){
+        showToastLikeStatus(S.save_check_only,"success");
+        showSuccessFrame();
+        setTimeout(resetForm, 1200);
+        return;
+      }
+      try{
+        saveBtn.disabled = true;
+        saveBtn.classList.add('loading');
+        const originalText = saveBtn.querySelector('span').textContent;
+        saveBtn.querySelector('span').textContent = S.saving;
+        showToastLikeStatus(S.saving, "info");
+        
+        const res=await fetch(GAS_ENDPOINT,{method:"POST", headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify({action:"add_student", record})});
+        if(!res.ok) throw new Error(`HTTP ${res.status}`);
+        const text=await res.text();
+        let data; 
+        try{ data=JSON.parse(text); }catch(e){ 
+          if(text.includes("نجاح")||text.toLowerCase().includes("success")) data={ok:true}; 
+          else throw new Error(text || "Invalid response"); 
+        }
+        if(!data?.ok) throw new Error(data?.error || "save_failed");
+        showToastLikeStatus(S.saved,"success");
+        showSuccessFrame();
+        setTimeout(resetForm,2000);
+      }catch(err){
+        console.error("Save error:",err);
+        showToastLikeStatus(`${S.save_failed}: ${err.message}`,"error");
+      }finally{ 
+        saveBtn.disabled = false; 
+        saveBtn.classList.remove('loading');
+        saveBtn.querySelector('span').textContent = S.btn_save;
+      }
+    }
+
+    function resetForm(){
+      const S=STRINGS[currentLang];
+      
+      // إعادة تعيين القيم
+      document.getElementById("studentName").value="";
+      document.getElementById("gradeLevel").value="";
+      document.getElementById("contactNumber").value="";
+      document.getElementById("schoolName").value="";
+      document.getElementById("district").value="";
+      document.getElementById("otherDistrict").value="";
+      document.getElementById("otherSchool").value="";
+      document.getElementById("coords").value="";
+      document.getElementById("coords").removeAttribute("data-url");
+      document.getElementById("coords").classList.remove("has-location");
+      document.getElementById("otherDistrictContainer").classList.remove("visible");
+      document.getElementById("otherSchoolContainer").classList.remove("visible");
+      lastLat=lastLng=null;
+      
+      // إزالة جميع علامات التحقق
+      const fields = ['studentName', 'gradeLevel', 'contactNumber', 'schoolName', 'district', 'coords', 'otherSchool', 'otherDistrict'];
+      fields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if(field){
+          field.classList.remove('valid', 'invalid');
+        }
+        const errorEl = document.getElementById(fieldId + 'Error');
+        if(errorEl){
+          errorEl.classList.remove('visible');
+        }
+      });
+      
+      document.getElementById("saveBtn").disabled=true;
+      document.getElementById("saveBtn").classList.remove("active");
+      showToastLikeStatus(S.reset_done, "info");
+      setTimeout(()=>showToastLikeStatus(S.status_fill_required, "info"),2000);
+    }
+
+    document.addEventListener("DOMContentLoaded", ()=>{
+      const root=document.documentElement;
+      const saved = localStorage.getItem("theme");
+      if(saved==="dark"){ root.classList.add("dark"); } else { root.classList.remove("dark"); }
+      const icon=document.getElementById("themeIcon");
+      const btn=document.getElementById("themeToggle");
+      const updateIcon=()=>{ if(!icon) return; icon.className = root.classList.contains("dark") ? "fas fa-sun" : "fas fa-moon"; };
+      updateIcon();
+      if(btn){
+        btn.addEventListener("click", ()=>{
+          root.classList.toggle("dark");
+          localStorage.setItem("theme", root.classList.contains("dark") ? "dark" : "light");
+          updateIcon();
+        });
+      }
+
+      setLang(localStorage.getItem("lang")||"ar");
+      updateGradeLevels(currentLang);
+      ensureDataLoaded();
+
+      document.getElementById("locateBtn").addEventListener("click", locateUserNoMap);
+      document.getElementById("saveBtn").addEventListener("click", saveRecord);
+      document.getElementById("resetBtn").addEventListener("click", resetForm);
+
+      // إعداد التحقق في الوقت الحقيقي
+      setupRealTimeValidation();
+
+      document.getElementById("schoolName").addEventListener("change", function(){
+        if(this.value==="other") document.getElementById("otherSchoolContainer").classList.add("visible");
+        else document.getElementById("otherSchoolContainer").classList.remove("visible");
+        updateSubmitButton();
+      });
+
+      document.getElementById("district").addEventListener("change", function(){
+        if(this.value==="other") document.getElementById("otherDistrictContainer").classList.add("visible");
+        else document.getElementById("otherDistrictContainer").classList.remove("visible");
+        updateSubmitButton();
+      });
+
+      document.getElementById("langToggle").addEventListener("click", ()=>toggleLang());
+      
+      const newBtn = document.getElementById("newRecord");
+      if(newBtn){
+        newBtn.addEventListener("click", ()=>{
+          document.getElementById("successOverlay").classList.remove("visible");
+          const card = document.querySelector(".card");
+          if(card) card.classList.remove("hidden");
+          resetForm();
+        });
+      }
+      
+      const closeBtn = document.getElementById("closeSuccess");
+      if(closeBtn){
+        closeBtn.addEventListener("click", ()=>{
+          window.close();
+        });
+      }
+
+      document.addEventListener("keypress", e=>{ 
+        if(e.key==="Enter"){ 
+          e.preventDefault(); 
+          // فقط إذا كان الزر مفعلاً
+          const saveBtn = document.getElementById("saveBtn");
+          if(!saveBtn.disabled && !saveBtn.classList.contains('loading')){
+            saveRecord(); 
+          }
+        } 
+      });
+
+      // السماح بفتح خريطة الموقع عند النقر على حقل الإحداثيات
+      document.getElementById("coords").addEventListener("click", function(){
+        if(this.dataset.url){
+          window.open(this.dataset.url, '_blank');
+        }
+      });
+
+      updateSubmitButton();
+      
+      // تهيئة Select2 مع ميزة بحث محسّنة
+      function matchCustom(params, data) {
+        // إذا لم يكن هناك بحث، إرجاع كل النتائج
+        if ($.trim(params.term) === '') return data;
+        
+        // إذا لم يكن لدينا نص
+        if (typeof data.text === 'undefined') return null;
+        
+        const term = params.term.toLowerCase().trim();
+        const text = data.text.toLowerCase();
+        
+        // بحث مرن يدعم الأحرف العربية والإنجليزية
+        if (text.indexOf(term) > -1) return data;
+        
+        // بحث بالكلمات - يبحث في بداية الكلمات
+        const words = text.split(' ');
+        for (let word of words) {
+          if (word.startsWith(term)) return data;
+        }
+        
+        return null;
+      }
+
+      const S = STRINGS[currentLang];
+      
+      if($("#schoolName").length){
+        $("#schoolName").select2({ 
+          width: '100%', 
+          minimumResultsForSearch: 0, // إظهار حقل البحث دائماً
+          dropdownParent: $('body'), 
+          dir: (currentLang==='ar'?'rtl':'ltr'), 
+          matcher: matchCustom,
+          placeholder: currentLang === 'ar' ? 'ابحث عن اسم المدرسة...' : 'Search for school name...',
+          language: {
+            searching: function() {
+              return currentLang === 'ar' ? 'جارٍ البحث...' : 'Searching...';
+            },
+            noResults: function() {
+              return currentLang === 'ar' ? 'لم يتم العثور على نتائج' : 'No results found';
+            },
+            inputTooShort: function(args) {
+              const msg = currentLang === 'ar' ? 'يرجى إدخال ' + args.minimum + ' أحرف أو أكثر' : 'Please enter ' + args.minimum + ' or more characters';
+              return msg;
+            },
+            loadingMore: function() {
+              return currentLang === 'ar' ? 'تحميل المزيد...' : 'Loading more...';
+            }
+          },
+          templateResult: function(data) {
+            if (!data.id) return data.text;
+            // إضافة أيقونة للمدرسة
+            const $result = $('<span><i class="fas fa-school" style="margin-' + (currentLang==='ar'?'left':'right') + ': 8px; color: #f59e0b;"></i> ' + data.text + '</span>');
+            return $result;
+          },
+          templateSelection: function(data) {
+            return data.text;
+          }
+        });
+        
+        // تحديث Select2 عند تغيير اللغة
+        $(document).on('languageChanged', function() {
+          if($("#schoolName").length){
+            $("#schoolName").select2('destroy');
+            $("#schoolName").select2({ 
+              width: '100%', 
+              minimumResultsForSearch: 0,
+              dropdownParent: $('body'), 
+              dir: (currentLang==='ar'?'rtl':'ltr'), 
+              matcher: matchCustom,
+              placeholder: currentLang === 'ar' ? 'ابحث عن اسم المدرسة...' : 'Search for school name...',
+              language: {
+                searching: function() { return currentLang === 'ar' ? 'جارٍ البحث...' : 'Searching...'; },
+                noResults: function() { return currentLang === 'ar' ? 'لم يتم العثور على نتائج' : 'No results found'; }
+              },
+              templateResult: function(data) {
+                if (!data.id) return data.text;
+                const $result = $('<span><i class="fas fa-school" style="margin-' + (currentLang==='ar'?'left':'right') + ': 8px; color: #f59e0b;"></i> ' + data.text + '</span>');
+                return $result;
+              }
+            });
+          }
+        });
+      }
+
+      if($("#district").length){
+        $("#district").select2({ 
+          width: '100%', 
+          minimumResultsForSearch: 0,
+          dropdownParent: $('body'), 
+          dir: (currentLang==='ar'?'rtl':'ltr'), 
+          matcher: matchCustom,
+          placeholder: currentLang === 'ar' ? 'ابحث عن اسم الحي...' : 'Search for district...',
+          language: {
+            searching: function() { return currentLang === 'ar' ? 'جارٍ البحث...' : 'Searching...'; },
+            noResults: function() { return currentLang === 'ar' ? 'لم يتم العثور على نتائج' : 'No results found'; }
+          },
+          templateResult: function(data) {
+            if (!data.id) return data.text;
+            const $result = $('<span><i class="fas fa-map-marker-alt" style="margin-' + (currentLang==='ar'?'left':'right') + ': 8px; color: #f59e0b;"></i> ' + data.text + '</span>');
+            return $result;
+          },
+          templateSelection: function(data) {
+            return data.text;
+          }
+        });
+        
+        // تحديث Select2 عند تغيير اللغة
+        $(document).on('languageChanged', function() {
+          if($("#district").length){
+            $("#district").select2('destroy');
+            $("#district").select2({ 
+              width: '100%', 
+              minimumResultsForSearch: 0,
+              dropdownParent: $('body'), 
+              dir: (currentLang==='ar'?'rtl':'ltr'), 
+              matcher: matchCustom,
+              placeholder: currentLang === 'ar' ? 'ابحث عن اسم الحي...' : 'Search for district...',
+              language: {
+                searching: function() { return currentLang === 'ar' ? 'جارٍ البحث...' : 'Searching...'; },
+                noResults: function() { return currentLang === 'ar' ? 'لم يتم العثور على نتائج' : 'No results found'; }
+              },
+              templateResult: function(data) {
+                if (!data.id) return data.text;
+                const $result = $('<span><i class="fas fa-map-marker-alt" style="margin-' + (currentLang==='ar'?'left':'right') + ': 8px; color: #f59e0b;"></i> ' + data.text + '</span>');
+                return $result;
+              }
+            });
+          }
+        });
+      }
+    });
+
+    // نظام المساعدة
+    const HELP_I18N = {
+      ar: {
+        title: "تعليمات الاستخدام",
+        tab_howto: "طريقة الاستخدام",
+        tab_faq: "الأسئلة الشائعة",
+        tab_tips: "نصائح وحيل",
+        contact: "للتواصل",
+        howto: [
+          "أدخل اسم الطالب/ـة والمرحلة الدراسية بشكل صحيح.",
+          "أدخل رقم التواصل (10 أرقام تبدأ بـ 05).",
+          "اختر المدرسة من القائمة أو اختر <strong>أخرى</strong> وأدخل الاسم يدويًا.",
+          "اختر الحي من القائمة أو اختر <strong>أخرى</strong> وأدخل الاسم يدويًا.",
+          "اضغط <strong>تحديد الموقع</strong> للحصول على الإحداثيات.",
+          "تحقق من صحة جميع البيانات ثم اضغط <strong>إرسال البيانات</strong>."
+        ],
+        faq: [
+          { q: "زر الإرسال غير مفعّل. ماذا أفعل؟", a: "تأكد من: <strong>1)</strong> تعبئة جميع الحقول <strong>2)</strong> صحة رقم الجوال (10 أرقام تبدأ بـ 05) <strong>3)</strong> تحديد موقعك الحالي" },
+          { q: "لا تظهر المدارس أو الأحياء في القائمة", a: "قد يكون هناك مشكلة في الاتصال. في هذه الحالة، اختر خيار <strong>أخرى</strong> وأدخل البيانات يدويًا." },
+          { q: "لا أجد مدرستي أو حيي بالقائمة", a: "لا مشكلة! اختر خيار <strong>أخرى</strong> في القائمة المنسدلة وأدخل الاسم يدويًا." },
+          { q: "لا أستطيع تحديد موقعي", a: "تأكد من: <strong>1)</strong> تفعيل خدمة الموقع على جهازك <strong>2)</strong> السماح للموقع بالوصول لموقعك <strong>3)</strong> أن لديك اتصال إنترنت" },
+          { q: "ظهرت رسالة خطأ في رقم الجوال", a: "رقم الجوال يجب أن يبدأ بـ <strong>05</strong> ويتكون من <strong>10 أرقام</strong> فقط. مثال: 0501234567" }
+        ],
+        tips: [
+          "استخدم اسمًا كاملاً واضحًا حتى يتم التعرف عليك بسهولة",
+          "تأكد من أن رقم الجوال صحيح - قد تحتاج المدرسة للتواصل معك",
+          "اضغط على حقل الإحداثيات بعد تحديد الموقع لفتح الخريطة والتحقق من الموقع",
+          "إذا كان لديك اتصال ضعيف، حاول من جديد في مكان به إشارة أقوى",
+          "يمكنك إعادة تعيين النموذج بالضغط على زر (إعادة تعيين) وملء البيانات من جديد"
+        ],
+        tips_title: "نصائح مهمة",
+        contact_email: "بريد إلكتروني",
+        contact_phone: "هاتف",
+        contact_whatsapp: "واتساب"
+      },
+      en: {
+        title: "How to Use",
+        tab_howto: "How-To",
+        tab_faq: "FAQ",
+        tab_tips: "Tips & Tricks",
+        contact: "Contact",
+        howto: [
+          "Enter the student name and grade level correctly.",
+          "Enter the phone number (10 digits starting with 05).",
+          "Pick the school from the list, or choose <strong>Other</strong> and type it manually.",
+          "Pick the district from the list, or choose <strong>Other</strong> and type it manually.",
+          "Click <strong>Get Current Location</strong> to capture coordinates.",
+          "Verify all data and click <strong>Send Data</strong> to submit."
+        ],
+        faq: [
+          { q: "The submit button is disabled. What should I do?", a: "Make sure: <strong>1)</strong> All fields are filled <strong>2)</strong> Phone number is valid (10 digits starting with 05) <strong>3)</strong> Your location is set" },
+          { q: "Schools or districts are not showing in the list", a: "There might be a connection issue. You can choose <strong>Other</strong> and enter the data manually." },
+          { q: "I can't find my school or district", a: "No problem! Choose <strong>Other</strong> in the dropdown and enter the name manually." },
+          { q: "I can't set my location", a: "Make sure: <strong>1)</strong> Location service is enabled on your device <strong>2)</strong> You've allowed the app to access your location <strong>3)</strong> You have internet connection" },
+          { q: "I got an error message about the phone number", a: "Phone number must start with <strong>05</strong> and have exactly <strong>10 digits</strong>. Example: 0501234567" }
+        ],
+        tips: [
+          "Use a clear and complete name so you can be easily identified",
+          "Make sure your phone number is correct - the school may need to contact you",
+          "Click on the coordinates field after setting location to verify on Google Maps",
+          "If you have weak connection, try again in an area with stronger signal",
+          "You can reset the form using the (Reset) button and fill it again from scratch"
+        ],
+        tips_title: "Important Tips",
+        contact_email: "Email",
+        contact_phone: "Phone",
+        contact_whatsapp: "WhatsApp"
+      }
+    };
+
+    function renderHelp(lang){
+      const dict = HELP_I18N[lang] || HELP_I18N.ar;
+      const t = (k)=> dict[k] || k;
+      document.querySelectorAll('[data-i18n="title"]').forEach(el=> el.textContent = t('title'));
+      document.querySelectorAll('[data-i18n="tab_howto"]').forEach(el=> {
+        const span = el.querySelector('span');
+        if(span) span.textContent = t('tab_howto');
+      });
+      document.querySelectorAll('[data-i18n="tab_faq"]').forEach(el=> {
+        const span = el.querySelector('span');
+        if(span) span.textContent = t('tab_faq');
+      });
+      document.querySelectorAll('[data-i18n="tab_tips"]').forEach(el=> {
+        const span = el.querySelector('span');
+        if(span) span.textContent = t('tab_tips');
+      });
+
+      // تحديث قائمة الخطوات
+      const ul = document.getElementById('howtoList');
+      if (ul){ 
+        ul.innerHTML = dict.howto.map((item, idx) => 
+          '<li data-step="' + (idx + 1) + '">'+ item +'</li>'
+        ).join(''); 
+      }
+      
+      // تحديث الأسئلة الشائعة
+      const faq = document.getElementById('faqList');
+      if (faq){ 
+        faq.innerHTML = dict.faq.map(x => 
+          '<div class="qa"><div class="q">' + x.q + '</div><div class="a">' + x.a + '</div></div>'
+        ).join(''); 
+      }
+      
+      // تحديث النصائح والحيل
+      const tips = document.getElementById('tipsList');
+      if (tips){
+        tips.innerHTML = '<div class="help-tips"><div class="help-tips-title"><i class="fas fa-lightbulb"></i> ' + t('tips_title') + '</div><ul>' + 
+          dict.tips.map(tip => '<li>' + tip + '</li>').join('') + 
+          '</ul></div>';
+      }
+      
+      // تحديث معلومات التواصل
+      const contact = document.getElementById('helpContact');
+      if (contact){
+        contact.innerHTML = 
+          '<a href="mailto:albalawiaa@seitco.com.sa" title="' + t('contact_email') + '">' +
+          '<i class="fas fa-envelope"></i> ' + t('contact_email') + '</a>' +
+          '<a href="tel:+966550463371" title="' + t('contact_phone') + '">' +
+          '<i class="fas fa-phone"></i> ' + t('contact_phone') + '</a>' +
+          '<a href="https://wa.me/966550463371" target="_blank" title="' + t('contact_whatsapp') + '">' +
+          '<i class="fab fa-whatsapp"></i> ' + t('contact_whatsapp') + '</a>';
+      }
+    }
+
+    function initHelpTabs(){
+      const modal = document.getElementById('helpModal');
+      if (!modal) return;
+      const btns = modal.querySelectorAll('.tab-btn');
+      const panels = modal.querySelectorAll('.tab-panel');
+      
+      // إضافة تأثير عند الضغط على التبويبات
+      btns.forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          const to = btn.getAttribute('data-tab');
+          btns.forEach(b=> {
+            if(b === btn){
+              b.classList.add('tab-active');
+            } else {
+              b.classList.remove('tab-active');
+            }
+          });
+          panels.forEach(p=> {
+            if(p.getAttribute('data-panel') === to){
+              p.style.display = 'block';
+              p.style.animation = 'fadeIn 0.2s ease';
+            } else {
+              p.style.display = 'none';
+            }
+          });
+        });
+      });
+      
+      // إضافة تأثير عند النقر على الأسئلة
+      setTimeout(() => {
+        const qaItems = modal.querySelectorAll('.qa');
+        qaItems.forEach(qa => {
+          qa.style.cursor = 'pointer';
+          qa.addEventListener('click', function(){
+            this.classList.toggle('expanded');
+          });
+        });
+      }, 100);
+    }
+
+    (function wireModal(){
+      const helpBtn = document.getElementById('helpBtn');
+      const modal = document.getElementById('helpModal');
+      const closeBtn = document.getElementById('closeHelp');
+      if (helpBtn && modal){
+        initHelpTabs();
+        
+        // فتح نافذة التعليمات
+        helpBtn.addEventListener('click', ()=>{
+          const lang = (typeof currentLang!=='undefined') ? currentLang : (document.documentElement.lang || 'ar');
+          renderHelp(lang);
+          modal.style.display = 'flex';
+          modal.setAttribute('aria-hidden','false');
+          document.body.style.overflow = 'hidden'; // منع التمرير خلف النافذة
+        });
+        
+        // إغلاق النافذة
+        const closeModal = () => {
+          modal.style.display = 'none';
+          modal.setAttribute('aria-hidden','true');
+          document.body.style.overflow = 'auto'; // استعادة التمرير
+        };
+        
+        closeBtn?.addEventListener('click', closeModal);
+        
+        // إغلاق عند الضغط على الخلفية
+        window.addEventListener('click', (e)=>{ 
+          if(e.target === modal){ 
+            closeModal();
+          } 
+        });
+        
+        // إغلاق عند الضغط على Escape
+        window.addEventListener('keydown', (e)=>{ 
+          if(e.key==='Escape' && modal.style.display !== 'none'){ 
+            closeModal();
+          } 
+        });
+      }
+    })();
+
+    window.renderHelp = renderHelp;
+
+    // زر العودة لأعلى
+    (function(){
+      const btn = document.getElementById('backToTop');
+      if(btn){
+        window.addEventListener('scroll', () => {
+          const sc = document.documentElement.scrollTop || document.body.scrollTop;
+          btn.style.display = (sc > 200 ? 'block' : 'none');
+        });
+        btn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+      }
+    })();
+
+    // تسجيل Service Worker
+    (function(){
+      if ('serviceWorker' in navigator){
+        navigator.serviceWorker.register('service-worker.js')
+          .then(()=>console.log('Service Worker registered ✅'))
+          .catch(e=>console.warn('SW register failed:', e));
+      }
+    })();
+  
+  
+  
+  </script>
+</body>
+</html>
