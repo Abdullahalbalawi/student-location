@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>تحديد موقع الطالب/ ـة</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
   
   <style>
@@ -1675,8 +1676,6 @@
       .tab-btn {
         font-size: 0.82rem;
       }
-    }
-      }
       
       .tabs {
         flex-direction: column;
@@ -2278,6 +2277,7 @@
   <header>
     
     <div class="header-content" style="flex-direction: column; gap: 0.4rem; text-align:center;">
+      <i class="fas fa-bus bus-icon"></i>
       <h1>
         تحديد موقع الطالب/ ـة
         <span class="build-tag"></span>
@@ -2290,19 +2290,20 @@
     <section class="card" aria-label="نموذج تحديد الموقع">
       <div class="switch-group">
         <button id="langToggle" class="lang-switch" type="button" title="تبديل اللغة" aria-label="تبديل اللغة">
-          <span id="btnLangText">العربية / English</span>
+          <i class="fas fa-globe"></i> <span id="btnLangText">العربية / English</span>
         </button>
         <button id="themeToggle" class="theme-switch" type="button" title="تبديل الوضع" aria-label="تبديل الوضع">
-          <span id="btnThemeText">تبديل</span>
+          <i id="themeIcon" class="fas fa-moon"></i> <span id="btnThemeText">تبديل</span>
         </button>
         <button type="button" id="helpBtn" class="btn-secondary" aria-label="تعليمات">
-          <span id="btnHelpText">تعليمات</span>
+          <i class="fas fa-question-circle"></i><span id="btnHelpText">تعليمات</span>
         </button>
       </div>
 
       <div class="card-body">
         <div class="section-title-wrap">
           <h2 class="section-title">
+            <i class="fas fa-user-graduate"></i>
             <span id="formTitle">نموذج إدخال بيانات</span>
           </h2>
           <p class="section-subtitle" id="formSubtitle">يرجى تعبئة البيانات ثم تحديد الموقع قبل الإرسال</p>
@@ -2312,12 +2313,12 @@
           <div class="field-wrapper">
             <label for="studentName" class="required">اسم الطالب/ ـة</label>
             <input id="studentName" placeholder="مثال: محمد أحمد" autocomplete="name" minlength="3" />
-            <span class="field-error" id="studentNameError"><span></span></span>
+            <span class="field-error" id="studentNameError"><i class="fas fa-exclamation-circle"></i> <span></span></span>
           </div>
           <div class="field-wrapper">
             <label for="gradeLevel" class="required">المرحلة الدراسية</label>
             <select id="gradeLevel"></select>
-            <span class="field-error" id="gradeLevelError"><span></span></span>
+            <span class="field-error" id="gradeLevelError"><i class="fas fa-exclamation-circle"></i> <span></span></span>
           </div>
         </div>
 
@@ -2325,18 +2326,18 @@
           <div class="field-wrapper">
             <label for="contactNumber" class="required">رقم التواصل</label>
             <input id="contactNumber" inputmode="tel" placeholder="05XXXXXXXX" autocomplete="tel" maxlength="10" />
-            <span class="field-error" id="contactNumberError"><span></span></span>
-            <div class="hint" id="phoneHint">يرجى إدخال رقم الجوال بصيغة صحيحة.</div>
+            <span class="field-error" id="contactNumberError"><i class="fas fa-exclamation-circle"></i> <span></span></span>
+            <div class="hint" id="phoneHint"><i class="fas fa-circle-info"></i> يرجى إدخال رقم الجوال بصيغة صحيحة.</div>
           </div>
           <div class="field-wrapper">
             <label for="schoolName" class="required">اسم المدرسة</label>
             <select id="schoolName"></select>
-            <span class="field-error" id="schoolNameError"><span></span></span>
+            <span class="field-error" id="schoolNameError"><i class="fas fa-exclamation-circle"></i> <span></span></span>
             <div id="otherSchoolContainer" class="other-district-container">
               <input type="text" id="otherSchool" placeholder="أدخل اسم المدرسة" minlength="2" />
-              <span class="field-error" id="otherSchoolError"><span></span></span>
+              <span class="field-error" id="otherSchoolError"><i class="fas fa-exclamation-circle"></i> <span></span></span>
             </div>
-            <div class="hint" id="schoolsHint">اختر اسم المدرسة من القائمة.</div>
+            <div class="hint" id="schoolsHint"><i class="fas fa-circle-info"></i> اختر اسم المدرسة من القائمة.</div>
           </div>
         </div>
 
@@ -2344,27 +2345,27 @@
           <div class="field-wrapper">
             <label for="district" class="required">الحي</label>
             <select id="district"></select>
-            <span class="field-error" id="districtError"><span></span></span>
+            <span class="field-error" id="districtError"><i class="fas fa-exclamation-circle"></i> <span></span></span>
             <div id="otherDistrictContainer" class="other-district-container">
               <input type="text" id="otherDistrict" placeholder="أدخل اسم الحي" minlength="2" />
-              <span class="field-error" id="otherDistrictError"><span></span></span>
+              <span class="field-error" id="otherDistrictError"><i class="fas fa-exclamation-circle"></i> <span></span></span>
             </div>
           </div>
           <div class="field-wrapper">
             <label for="coords" class="required">الموقع الحالي (GPS)</label>
             <input id="coords" class="coords-field" readonly placeholder="اضغط (تحديد الموقع الحالي) للحصول على الإحداثيات" title="سيتم عرض الإحداثيات هنا بعد تحديد الموقع" />
-            <span class="field-error" id="coordsError"><span></span></span>
-            <div class="hint" id="locationHint">يجب تحديد الموقع قبل إرسال البيانات.</div>
+            <span class="field-error" id="coordsError"><i class="fas fa-exclamation-circle"></i> <span></span></span>
+            <div class="hint" id="locationHint"><i class="fas fa-circle-info"></i> يجب تحديد الموقع قبل إرسال البيانات.</div>
           </div>
         </div>
 
         <div class="sp">
           <div class="toolbar">
-            <button class="btn" id="saveBtn" aria-label="إرسال البيانات"><span id="btnSaveText">إرسال البيانات</span></button>
-            <button class="btn secondary" id="locateBtn" type="button" aria-label="تحديد الموقع الحالي"><span id="btnLocateText">تحديد الموقع الحالي</span></button>
-            <button class="btn secondary" id="resetBtn" type="button" aria-label="إعادة تعيين"><span id="btnResetText">إعادة تعيين</span></button>
+            <button class="btn" id="saveBtn" aria-label="إرسال البيانات"><i class="fas fa-paper-plane"></i> <span id="btnSaveText">إرسال البيانات</span></button>
+            <button class="btn secondary" id="locateBtn" type="button" aria-label="تحديد الموقع الحالي"><i class="fas fa-location-dot"></i> <span id="btnLocateText">تحديد الموقع الحالي</span></button>
+            <button class="btn secondary" id="resetBtn" type="button" aria-label="إعادة تعيين"><i class="fas fa-rotate-right"></i> <span id="btnResetText">إعادة تعيين</span></button>
           </div>
-          <span id="status" class="pill">املأ جميع الحقول المطلوبة</span>
+          <span id="status" class="pill"><i class="fas fa-circle-info"></i> املأ جميع الحقول المطلوبة</span>
         </div>
       </div>
     </section>
@@ -2372,12 +2373,12 @@
 
   <div id="successOverlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="successTitle">
     <div class="box">
-      <h3 id="successTitle"><span class="thanks"></span></h3>
+      <h3 id="successTitle"><i class="fas fa-circle-check"></i> <span class="thanks"></span></h3>
       <p class="line1"></p>
-      <div class="brand"><span class="brandText"></span></div>
+      <div class="brand"><i class="fa-solid fa-bus"></i> <span class="brandText"></span></div>
       <div class="actions">
         <button type="button" class="btn" id="closeSuccess">
-          <span id="closeSuccessText">إغلاق</span>
+          <i class="fas fa-times"></i> <span id="closeSuccessText">إغلاق</span>
         </button>
       </div>
     </div>
@@ -2387,21 +2388,22 @@
     <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
       <div class="modal-header">
         <div class="modal-header-icon">
+          <i class="fas fa-circle-question"></i>
         </div>
         <h2 id="helpTitle" class="modal-title" data-i18n="title">تعليمات الاستخدام</h2>
-        <button class="close" id="closeHelp" aria-label="إغلاق"></button>
+        <button class="close" id="closeHelp" aria-label="إغلاق"><i class="fas fa-times"></i></button>
       </div>
 
       <div class="modal-body">
         <div class="tabs">
           <button class="tab-btn tab-active" data-tab="howto" data-i18n="tab_howto">
-            <span>طريقة الاستخدام</span>
+            <i class="fas fa-list-check"></i> <span>طريقة الاستخدام</span>
           </button>
           <button class="tab-btn" data-tab="faq" data-i18n="tab_faq">
-            <span>الأسئلة الشائعة</span>
+            <i class="fas fa-circle-question"></i> <span>الأسئلة الشائعة</span>
           </button>
           <button class="tab-btn" data-tab="tips" data-i18n="tab_tips">
-            <span>نصائح</span>
+            <i class="fas fa-lightbulb"></i> <span>نصائح</span>
           </button>
         </div>
 
@@ -2426,6 +2428,14 @@
     <p class="footer-rights">
       نظام تحديد موقع الطالب - جميع الحقوق محفوظة © 
     </p>
+    <div class="footer-contact">
+      <a href="mailto:albalawiaa@seitco.com.sa" title="البريد"><i class="fas fa-envelope"></i></a>
+      <a href="tel:+966550463371" title="الهاتف"><i class="fas fa-phone"></i></a>
+    </div>
+    <div class="footer-social">
+      <a href="https://wa.me/966550463371" target="_blank" title="واتساب"><i class="fab fa-whatsapp"></i></a>
+      <a href="https://maps.app.goo.gl/hSaoMcRPdhV5LbQ97" target="_blank" title="الموقع"><i class="fas fa-location-dot"></i></a>
+    </div>
   
     <p class="footer-dev">تم التطوير بواسطة عبدالله البلوي</p>
 
@@ -2659,7 +2669,11 @@
         this.searchInput.placeholder = this.config.searchPlaceholder;
         this.searchInput.setAttribute('autocomplete', 'off');
         
+        const searchIcon = document.createElement('i');
+        searchIcon.className = 'fas fa-search searchable-select-search-icon';
+        
         searchWrapper.appendChild(this.searchInput);
+        searchWrapper.appendChild(searchIcon);
         
         // حاوية الخيارات
         this.optionsContainer = document.createElement('div');
@@ -3111,7 +3125,8 @@
       
       const langBtn=document.getElementById('langToggle'); 
       if(langBtn){ 
-        langBtn.innerHTML = `<span id="btnLangText">${S.btn_lang_label}</span>`; 
+        const ic=langBtn.querySelector('i')?.outerHTML||'<i class="fas fa-globe"></i>'; 
+        langBtn.innerHTML = ic + ' ' + `<span id="btnLangText">${S.btn_lang_label}</span>`; 
       }
 
       // تحديث أزرار التحكم
@@ -3204,23 +3219,23 @@
       status.textContent=message; 
       status.className="pill";
       if(type==="success"){ 
-        status.innerHTML=`${message}`; 
+        status.innerHTML=`<i class="fas fa-check-circle"></i> ${message}`; 
         status.classList.add("success"); 
       }
       else if(type==="error"){ 
-        status.innerHTML=`${message}`; 
+        status.innerHTML=`<i class="fas fa-exclamation-circle"></i> ${message}`; 
         status.classList.add("error"); 
       }
       else if(type==="warning"){ 
-        status.innerHTML=`${message}`; 
+        status.innerHTML=`<i class="fas fa-exclamation-triangle"></i> ${message}`; 
         status.classList.add("warning"); 
       }
       else if(type==="info"){ 
-        status.innerHTML=`${message}`; 
+        status.innerHTML=`<i class="fas fa-info-circle"></i> ${message}`; 
         status.classList.add("info"); 
       }
       else{ 
-        status.innerHTML=`${message}`; 
+        status.innerHTML=`<i class="fas fa-info-circle"></i> ${message}`; 
       }
     }
 
@@ -3726,7 +3741,7 @@
       if(saved==="dark"){ root.classList.add("dark"); } else { root.classList.remove("dark"); }
       const icon=document.getElementById("themeIcon");
       const btn=document.getElementById("themeToggle");
-      const updateIcon=()=>{ return; };
+      const updateIcon=()=>{ if(!icon) return; icon.className = root.classList.contains("dark") ? "fas fa-sun" : "fas fa-moon"; };
       updateIcon();
       if(btn){
         btn.addEventListener("click", ()=>{
@@ -3910,7 +3925,7 @@
       // تحديث النصائح والحيل
       const tips = document.getElementById('tipsList');
       if (tips){
-        tips.innerHTML = '<div class="help-tips"><div class="help-tips-title">' + t('tips_title') + '</div><ul>' + 
+        tips.innerHTML = '<div class="help-tips"><div class="help-tips-title"><i class="fas fa-lightbulb"></i> ' + t('tips_title') + '</div><ul>' + 
           dict.tips.map(tip => '<li>' + tip + '</li>').join('') + 
           '</ul></div>';
       }
@@ -3920,11 +3935,11 @@
       if (contact){
         contact.innerHTML = 
           '<a href="mailto:albalawiaa@seitco.com.sa" title="' + t('contact_email') + '">' +
-          t('contact_email') + '</a>' +
+          '<i class="fas fa-envelope"></i> ' + t('contact_email') + '</a>' +
           '<a href="tel:+966550463371" title="' + t('contact_phone') + '">' +
-          t('contact_phone') + '</a>' +
+          '<i class="fas fa-phone"></i> ' + t('contact_phone') + '</a>' +
           '<a href="https://wa.me/966550463371" target="_blank" title="' + t('contact_whatsapp') + '">' +
-          t('contact_whatsapp') + '</a>';
+          '<i class="fab fa-whatsapp"></i> ' + t('contact_whatsapp') + '</a>';
       }
     }
 
