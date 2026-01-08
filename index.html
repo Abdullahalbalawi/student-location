@@ -3829,7 +3829,9 @@
       const closeBtn = document.getElementById("closeSuccess");
       if(closeBtn){
         closeBtn.addEventListener("click", ()=>{
-          window.close();
+          document.getElementById("successOverlay").classList.remove("visible");
+          const card = document.querySelector(".card");
+          if(card) card.classList.remove("hidden");
         });
       }
 
