@@ -295,13 +295,360 @@
     .coords-field{cursor:default!important;}
     .coords-field:not([data-url]){color:var(--muted);}
 
-    .overlay{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.45); z-index:1000; }
-    .overlay.visible{ display:flex; }
-    .overlay .box{ background:var(--card); color:var(--text); border:2px solid var(--brand); border-radius:18px; padding:1.2rem 1.4rem; max-width:720px; margin:1rem; text-align:center; box-shadow:0 10px 30px rgba(0,0,0,.25); }
-    .overlay .box h3{ margin:0 0 .5rem; font-size:1.25rem; color:var(--text-strong); }
-    .overlay .brand{ font-weight:800; margin-top:.25rem; color:var(--text-strong); }
-    .overlay .actions{ margin-top:.9rem; display:flex; justify-content:center; gap:.6rem; }
-    .overlay .actions .btn{ padding:.6rem 1rem; }
+    /* القوائم المنسدلة مع البحث */
+    .searchable-select {
+      position: relative;
+      width: 100%;
+    }
+    
+    .searchable-select-trigger {
+      width: 100%;
+      padding: 1.1rem 1.2rem;
+      padding-left: 2.5rem;
+      border-radius: 14px;
+      border: 2px solid rgba(251, 191, 36, 0.3);
+      font-size: clamp(1.02rem, 2.6vw, 1.08rem);
+      transition: all 0.3s ease;
+      font-family: 'Tajawal', sans-serif;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(8px);
+      color: var(--text);
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-align: right;
+      min-height: 52px;
+    }
+    
+    html[dir="ltr"] .searchable-select-trigger {
+      padding-left: 1.2rem;
+      padding-right: 2.5rem;
+      text-align: left;
+    }
+    
+    .searchable-select-trigger::after {
+      content: '\f107';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      transition: transform 0.3s ease;
+      font-size: 1rem;
+    }
+    
+    html[dir="ltr"] .searchable-select-trigger::after {
+      left: auto;
+      right: 1rem;
+    }
+    
+    .searchable-select.open .searchable-select-trigger::after {
+      transform: translateY(-50%) rotate(180deg);
+    }
+    
+    .searchable-select-trigger:hover {
+      border-color: rgba(251, 191, 36, 0.5);
+      background: rgba(255, 255, 255, 0.75);
+    }
+    
+    .searchable-select-trigger:focus {
+      outline: none;
+      border-color: #f59e0b;
+      box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.15);
+    }
+    
+    .searchable-select-trigger.placeholder {
+      color: #b45309;
+      opacity: 0.7;
+    }
+    
+    .searchable-select-dropdown {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      right: 0;
+      background: var(--card);
+      border: 2px solid rgba(251, 191, 36, 0.4);
+      border-radius: 14px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+      z-index: 100;
+      display: none;
+      overflow: hidden;
+      animation: dropdownFadeIn 0.2s ease;
+    }
+    
+    @keyframes dropdownFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .searchable-select.open .searchable-select-dropdown {
+      display: block;
+    }
+    
+    .searchable-select-search {
+      padding: 0.75rem;
+      border-bottom: 1px solid var(--line);
+      background: rgba(251, 191, 36, 0.05);
+    }
+    
+    .searchable-select-search input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      padding-right: 2.5rem;
+      border: 2px solid rgba(251, 191, 36, 0.3);
+      border-radius: 10px;
+      font-size: 1rem;
+      font-family: 'Tajawal', sans-serif;
+      background: #fff;
+      transition: all 0.3s ease;
+    }
+    
+    html[dir="ltr"] .searchable-select-search input {
+      padding-right: 1rem;
+      padding-left: 2.5rem;
+    }
+    
+    .searchable-select-search input:focus {
+      outline: none;
+      border-color: #f59e0b;
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+    }
+    
+    .searchable-select-search-icon {
+      position: absolute;
+      right: 1.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      pointer-events: none;
+    }
+    
+    html[dir="ltr"] .searchable-select-search-icon {
+      right: auto;
+      left: 1.5rem;
+    }
+    
+    .searchable-select-options {
+      max-height: 220px;
+      overflow-y: auto;
+      padding: 0.5rem 0;
+    }
+    
+    .searchable-select-option {
+      padding: 0.85rem 1.2rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    
+    .searchable-select-option:hover {
+      background: rgba(251, 191, 36, 0.15);
+    }
+    
+    .searchable-select-option.selected {
+      background: rgba(251, 191, 36, 0.25);
+      color: #78350f;
+    }
+    
+    .searchable-select-option.selected::before {
+      content: '\f00c';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      color: #16a34a;
+      font-size: 0.9rem;
+    }
+    
+    .searchable-select-option.hidden {
+      display: none;
+    }
+    
+    .searchable-select-option.disabled {
+      color: var(--muted);
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+    
+    .searchable-select-no-results {
+      padding: 1rem;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.95rem;
+      display: none;
+    }
+    
+    .searchable-select-no-results.visible {
+      display: block;
+    }
+    
+    /* الوضع الداكن للقوائم */
+    :root.dark .searchable-select-trigger {
+      background: rgba(28, 25, 23, 0.6);
+      border-color: rgba(245, 158, 11, 0.3);
+      color: #fef3c7;
+    }
+    
+    :root.dark .searchable-select-trigger:hover {
+      background: rgba(28, 25, 23, 0.7);
+    }
+    
+    :root.dark .searchable-select-dropdown {
+      background: #1c1917;
+      border-color: rgba(245, 158, 11, 0.3);
+    }
+    
+    :root.dark .searchable-select-search {
+      background: rgba(245, 158, 11, 0.05);
+    }
+    
+    :root.dark .searchable-select-search input {
+      background: #292524;
+      border-color: rgba(245, 158, 11, 0.3);
+      color: #fef3c7;
+    }
+    
+    :root.dark .searchable-select-option:hover {
+      background: rgba(245, 158, 11, 0.1);
+    }
+    
+    :root.dark .searchable-select-option.selected {
+      background: rgba(245, 158, 11, 0.2);
+      color: #fbbf24;
+    }
+    
+    /* استجابة القوائم للهواتف */
+    @media (max-width: 480px) {
+      .searchable-select-trigger {
+        padding: 0.95rem 1rem;
+        min-height: 50px;
+        font-size: 1rem;
+      }
+      
+      .searchable-select-dropdown {
+        border-radius: 12px;
+      }
+      
+      .searchable-select-search input {
+        padding: 0.7rem 0.9rem;
+        font-size: 0.95rem;
+      }
+      
+      .searchable-select-option {
+        padding: 0.8rem 1rem;
+        font-size: 0.95rem;
+      }
+      
+      .searchable-select-options {
+        max-height: 200px;
+      }
+    }
+
+    .overlay{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.55); z-index:1000; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+    .overlay.visible{ display:flex; animation: overlayFadeIn 0.3s ease; }
+    @keyframes overlayFadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .overlay .box{ 
+      background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+      color:var(--text); 
+      border:3px solid #f59e0b; 
+      border-radius:24px; 
+      padding:2rem 2.5rem; 
+      max-width:420px; 
+      margin:1rem; 
+      text-align:center; 
+      box-shadow: 0 20px 60px rgba(0,0,0,.3), 0 0 0 1px rgba(251, 191, 36, 0.2);
+      animation: boxPopIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes boxPopIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    :root.dark .overlay .box {
+      background: linear-gradient(135deg, #292524 0%, #1c1917 100%);
+      border-color: #f59e0b;
+    }
+    .overlay .box h3{ 
+      margin:0 0 1rem; 
+      font-size:1.5rem; 
+      color: #78350f;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+    }
+    .overlay .box h3 i {
+      font-size: 1.8rem;
+      color: #16a34a;
+    }
+    :root.dark .overlay .box h3 { color: #fbbf24; }
+    .overlay .box .line1 {
+      color: #92400e;
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    :root.dark .overlay .box .line1 { color: #fcd34d; }
+    .overlay .brand{ 
+      font-weight:800; 
+      margin-top:.5rem; 
+      color: #78350f;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.8rem;
+      background: rgba(251, 191, 36, 0.2);
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+    }
+    .overlay .brand i {
+      color: #f59e0b;
+      font-size: 1.3rem;
+    }
+    :root.dark .overlay .brand { 
+      color: #fbbf24; 
+      background: rgba(251, 191, 36, 0.1);
+    }
+    .overlay .actions{ margin-top:1rem; display:flex; justify-content:center; gap:1rem; flex-wrap: wrap; }
+    .overlay .actions .btn{ 
+      padding:.8rem 1.5rem; 
+      font-size: 1rem;
+      border-radius: 12px;
+      min-width: 140px;
+    }
+    .overlay .actions .btn.secondary {
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      color: #78350f;
+      border: none;
+    }
+    .overlay .actions .btn.secondary:hover {
+      background: linear-gradient(135deg, #f59e0b, #ea580c);
+      transform: translateY(-2px);
+    }
+    .overlay .actions .btn:not(.secondary) {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: white;
+      border: none;
+    }
+    .overlay .actions .btn:not(.secondary):hover {
+      background: linear-gradient(135deg, #dc2626, #b91c1c);
+      transform: translateY(-2px);
+    }
 
     /* تحسينات للاستجابة على جميع الشاشات */
     
@@ -502,26 +849,6 @@
       .pill {
         font-size: 0.95rem;
         padding: 0.75rem 1.1rem;
-      }
-      
-      /* Select2 للتابليت */
-      .select2-container {
-        width: 100% !important;
-      }
-      .select2-container .select2-selection--single {
-        min-height: 48px;
-        border-radius: 14px;
-      }
-      .select2-container .select2-selection__rendered {
-        line-height: 48px;
-        padding: 0 1rem;
-      }
-      .select2-container .select2-selection__arrow {
-        height: 48px;
-      }
-      .select2-container .select2-search__field {
-        font-size: 1rem;
-        padding: 0.7rem;
       }
     }
 
@@ -862,176 +1189,6 @@
     }
 
     html,body{overflow-x:hidden;}
-
-    /* أنماط Select2 المحسّنة */
-    .select2-container--default .select2-selection--single {
-      background: rgba(255, 255, 255, 0.6);
-      border: 2px solid rgba(251, 191, 36, 0.3);
-      border-radius: 14px;
-      height: auto;
-      min-height: 52px;
-      transition: all 0.3s ease;
-    }
-    
-    .select2-container--default .select2-selection--single:hover {
-      border-color: rgba(251, 191, 36, 0.5);
-      background: rgba(255, 255, 255, 0.75);
-    }
-    
-    .select2-container--default.select2-container--open .select2-selection--single {
-      border-color: #f59e0b;
-      box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.15);
-      background: rgba(255, 255, 255, 0.9);
-    }
-    
-    .select2-container--default .select2-selection--single .select2-selection__rendered {
-      color: var(--text);
-      line-height: 48px;
-      padding: 0 1.2rem;
-      font-weight: 600;
-      font-size: 1.02rem;
-    }
-    
-    .select2-container--default .select2-selection--single .select2-selection__placeholder {
-      color: #b45309;
-      opacity: 0.7;
-    }
-    
-    .select2-container--default .select2-selection--single .select2-selection__arrow {
-      height: 48px;
-      right: 12px;
-    }
-    
-    html[dir="rtl"] .select2-container--default .select2-selection--single .select2-selection__arrow {
-      left: 12px;
-      right: auto;
-    }
-    
-    /* قائمة البحث */
-    .select2-dropdown {
-      background: #fff;
-      border: 2px solid #f59e0b;
-      border-radius: 14px;
-      box-shadow: 0 8px 32px rgba(245, 158, 11, 0.25);
-      margin-top: 4px;
-    }
-    
-    .select2-search--dropdown {
-      padding: 0.8rem;
-      background: rgba(251, 191, 36, 0.08);
-    }
-    
-    .select2-search--dropdown .select2-search__field {
-      background: #fff;
-      border: 2px solid rgba(251, 191, 36, 0.3);
-      border-radius: 10px;
-      padding: 0.8rem 1rem;
-      font-family: 'Tajawal', sans-serif;
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--text);
-      transition: all 0.3s ease;
-    }
-    
-    .select2-search--dropdown .select2-search__field:focus {
-      outline: none;
-      border-color: #f59e0b;
-      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
-    }
-    
-    .select2-search--dropdown .select2-search__field::placeholder {
-      color: #b45309;
-      opacity: 0.7;
-    }
-    
-    /* عناصر القائمة */
-    .select2-results__option {
-      padding: 0.9rem 1.2rem;
-      font-family: 'Tajawal', sans-serif;
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--text);
-      transition: all 0.2s ease;
-      border-radius: 8px;
-      margin: 0.2rem 0.5rem;
-    }
-    
-    .select2-results__option--highlighted {
-      background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(245, 158, 11, 0.15)) !important;
-      color: #78350f !important;
-    }
-    
-    .select2-results__option--selected {
-      background: linear-gradient(135deg, #fbbf24, #f59e0b) !important;
-      color: #78350f !important;
-      font-weight: 800;
-    }
-    
-    .select2-results__option[aria-selected=true]:not(.select2-results__option--highlighted) {
-      background: rgba(251, 191, 36, 0.12) !important;
-    }
-    
-    /* رسائل */
-    .select2-results__message {
-      padding: 1rem;
-      text-align: center;
-      color: var(--muted);
-      font-style: italic;
-    }
-    
-    .select2-container--default .select2-results__option--disabled {
-      color: #d1d5db;
-      font-weight: 800;
-      background: rgba(0, 0, 0, 0.03);
-    }
-    
-    /* الوضع الداكن */
-    :root.dark .select2-container--default .select2-selection--single {
-      background: rgba(28, 25, 23, 0.6);
-      border-color: rgba(245, 158, 11, 0.3);
-      color: #fef3c7;
-    }
-    
-    :root.dark .select2-container--default .select2-selection--single .select2-selection__rendered {
-      color: #fef3c7;
-    }
-    
-    :root.dark .select2-container--default .select2-selection--single .select2-selection__placeholder {
-      color: #fcd34d;
-    }
-    
-    :root.dark .select2-dropdown {
-      background: #1c1917;
-      border-color: #f59e0b;
-    }
-    
-    :root.dark .select2-search--dropdown {
-      background: rgba(245, 158, 11, 0.1);
-    }
-    
-    :root.dark .select2-search--dropdown .select2-search__field {
-      background: rgba(28, 25, 23, 0.8);
-      border-color: rgba(245, 158, 11, 0.3);
-      color: #fef3c7;
-    }
-    
-    :root.dark .select2-results__option {
-      color: #fde68a;
-    }
-    
-    :root.dark .select2-results__option--highlighted {
-      background: linear-gradient(135deg, rgba(245, 158, 11, 0.25), rgba(234, 88, 12, 0.2)) !important;
-      color: #fbbf24 !important;
-    }
-    
-    :root.dark .select2-results__option--selected {
-      background: linear-gradient(135deg, #f59e0b, #ea580c) !important;
-      color: #fff !important;
-    }
-    
-    :root.dark .select2-results__option[aria-selected=true]:not(.select2-results__option--highlighted) {
-      background: rgba(245, 158, 11, 0.15) !important;
-    }
 
     :root.dark { 
       --field-bg:#1a1d2b; 
@@ -1565,24 +1722,6 @@
     
     .card.hidden { 
       display: none; 
-    }
-    
-    .contact-box {
-      margin: 1rem auto;
-      padding: 1rem;
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      background: var(--card);
-      text-align: center;
-      max-width: 300px;
-    }
-    .contact-box p {
-      margin: 0.5rem 0;
-      font-size: 0.95rem;
-    }
-    .contact-box i {
-      margin-left: 0.5rem;
-      color: var(--brand);
     }
 
     #helpModal .actions {
@@ -2163,7 +2302,6 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <link rel="apple-touch-icon" href="icon-192.png">
   
-  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 </head>
 <body>
 
@@ -2269,10 +2407,6 @@
       <h3 id="successTitle"><i class="fas fa-circle-check"></i> <span class="thanks"></span></h3>
       <p class="line1"></p>
       <div class="brand"><i class="fa-solid fa-bus"></i> <span class="brandText"></span></div>
-      <div class="contact-box">
-        <p><i class="fas fa-phone"></i> +966550463371</p>
-        <p><i class="fas fa-envelope"></i> albalawiaa@seitco.com.sa</p>
-      </div>
       <div class="actions">
         <button type="button" class="btn secondary" id="newRecord">
           <i class="fas fa-plus"></i> <span id="newRecordText">تسجيل جديد</span>
@@ -2326,7 +2460,7 @@
   
   <footer class="app-footer">
     <p class="footer-rights">
-      
+      نظام تحديد موقع الطالب - جميع الحقوق محفوظة © 
     </p>
     <div class="footer-contact">
       <a href="mailto:albalawiaa@seitco.com.sa" title="البريد"><i class="fas fa-envelope"></i></a>
@@ -2345,7 +2479,6 @@
   <button id="backToTop" title="العودة لأعلى"><i class="fas fa-arrow-up"></i></button>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
   
   <script>
     // ... (جميع دوال الجافاسكريبت السابقة تبقى كما هي بدون تغيير)
@@ -2401,7 +2534,7 @@
         success_thanks: "شكراً لكم، نسعد بخدمتكم",
         success_line1: "الشركة السعودية الإماراتية للنقل المتكامل",
         success_brand: "مشروع النقل المدرسي بالعلا",
-        footer_rights: "",
+        footer_rights: "نظام تحديد موقع الطالب - جميع الحقوق محفوظة ©",
         footer_contact: "للتواصل", 
         btn_help: "تعليمات", 
         btn_theme: "تبديل", 
@@ -2410,7 +2543,10 @@
         new_record: "تسجيل جديد",
         close: "إغلاق",
         other_school_placeholder: "أدخل اسم المدرسة",
-        other_district_placeholder: "أدخل اسم الحي"
+        other_district_placeholder: "أدخل اسم الحي",
+        search_placeholder: "ابحث عن المدرسة...",
+        search_placeholder_district: "ابحث عن الحي...",
+        no_results: "لا توجد نتائج"
       },
       en: { 
         app_title: "Student Location", 
@@ -2460,7 +2596,7 @@
         success_thanks: "Thank you — We're happy to serve you",
         success_line1: "Saudi–Emirati Integrated Transport Company",
         success_brand: "AlUla School Transport Project",
-        footer_rights: "Student Location System — All rights reserved © 2025",
+        footer_rights: "Student Location System — All rights reserved ©",
         footer_contact: "Contact", 
         btn_help: "Help", 
         btn_theme: "Toggle", 
@@ -2469,7 +2605,10 @@
         new_record: "New Record",
         close: "Close",
         other_school_placeholder: "Enter school name",
-        other_district_placeholder: "Enter district name"
+        other_district_placeholder: "Enter district name",
+        search_placeholder: "Search for school...",
+        search_placeholder_district: "Search for district...",
+        no_results: "No results found"
       }
     };
 
@@ -2515,6 +2654,330 @@
       { code: "D03", ar: "العقير", en: "Al-Uqayr" }
     ];
 
+    // ===== نظام القوائم المنسدلة مع البحث =====
+    class SearchableSelect {
+      constructor(originalSelect, config = {}) {
+        this.originalSelect = originalSelect;
+        this.config = {
+          searchPlaceholder: config.searchPlaceholder || 'ابحث...',
+          noResultsText: config.noResultsText || 'لا توجد نتائج',
+          ...config
+        };
+        this.isOpen = false;
+        this.selectedValue = '';
+        this.init();
+      }
+
+      init() {
+        // إخفاء القائمة الأصلية
+        this.originalSelect.style.display = 'none';
+        
+        // إنشاء الهيكل الجديد
+        this.createStructure();
+        this.attachEvents();
+        this.syncFromOriginal();
+      }
+
+      createStructure() {
+        // الحاوية الرئيسية
+        this.container = document.createElement('div');
+        this.container.className = 'searchable-select';
+        
+        // زر الفتح
+        this.trigger = document.createElement('div');
+        this.trigger.className = 'searchable-select-trigger placeholder';
+        this.trigger.setAttribute('tabindex', '0');
+        this.trigger.setAttribute('role', 'combobox');
+        this.trigger.setAttribute('aria-haspopup', 'listbox');
+        this.trigger.setAttribute('aria-expanded', 'false');
+        
+        // القائمة المنسدلة
+        this.dropdown = document.createElement('div');
+        this.dropdown.className = 'searchable-select-dropdown';
+        this.dropdown.setAttribute('role', 'listbox');
+        
+        // صندوق البحث
+        const searchWrapper = document.createElement('div');
+        searchWrapper.className = 'searchable-select-search';
+        searchWrapper.style.position = 'relative';
+        
+        this.searchInput = document.createElement('input');
+        this.searchInput.type = 'text';
+        this.searchInput.placeholder = this.config.searchPlaceholder;
+        this.searchInput.setAttribute('autocomplete', 'off');
+        
+        const searchIcon = document.createElement('i');
+        searchIcon.className = 'fas fa-search searchable-select-search-icon';
+        
+        searchWrapper.appendChild(this.searchInput);
+        searchWrapper.appendChild(searchIcon);
+        
+        // حاوية الخيارات
+        this.optionsContainer = document.createElement('div');
+        this.optionsContainer.className = 'searchable-select-options';
+        
+        // رسالة عدم وجود نتائج
+        this.noResults = document.createElement('div');
+        this.noResults.className = 'searchable-select-no-results';
+        this.noResults.textContent = this.config.noResultsText;
+        
+        // تجميع العناصر
+        this.dropdown.appendChild(searchWrapper);
+        this.dropdown.appendChild(this.optionsContainer);
+        this.dropdown.appendChild(this.noResults);
+        
+        this.container.appendChild(this.trigger);
+        this.container.appendChild(this.dropdown);
+        
+        // إدراج بعد القائمة الأصلية
+        this.originalSelect.parentNode.insertBefore(this.container, this.originalSelect.nextSibling);
+      }
+
+      attachEvents() {
+        // فتح/إغلاق القائمة
+        this.trigger.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.toggle();
+        });
+        
+        this.trigger.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            this.toggle();
+          } else if (e.key === 'Escape' && this.isOpen) {
+            this.close();
+          }
+        });
+        
+        // البحث
+        this.searchInput.addEventListener('input', () => this.filterOptions());
+        
+        this.searchInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') {
+            this.close();
+          } else if (e.key === 'Enter') {
+            const visible = this.optionsContainer.querySelectorAll('.searchable-select-option:not(.hidden):not(.disabled)');
+            if (visible.length === 1) {
+              this.selectOption(visible[0]);
+            }
+          } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+            e.preventDefault();
+            this.navigateOptions(e.key === 'ArrowDown' ? 1 : -1);
+          }
+        });
+        
+        // إغلاق عند النقر خارج القائمة
+        document.addEventListener('click', (e) => {
+          if (!this.container.contains(e.target)) {
+            this.close();
+          }
+        });
+      }
+
+      syncFromOriginal() {
+        // مسح الخيارات الحالية
+        this.optionsContainer.innerHTML = '';
+        
+        // جلب الخيارات من القائمة الأصلية
+        const options = this.originalSelect.querySelectorAll('option');
+        options.forEach((opt, index) => {
+          if (opt.disabled && index === 0) {
+            // تخزين النص الافتراضي
+            this.trigger.textContent = opt.textContent;
+            return;
+          }
+          
+          const optionEl = document.createElement('div');
+          optionEl.className = 'searchable-select-option';
+          if (opt.disabled) optionEl.classList.add('disabled');
+          optionEl.setAttribute('data-value', opt.value);
+          optionEl.setAttribute('role', 'option');
+          optionEl.textContent = opt.textContent;
+          
+          optionEl.addEventListener('click', () => {
+            if (!opt.disabled) this.selectOption(optionEl);
+          });
+          
+          this.optionsContainer.appendChild(optionEl);
+        });
+        
+        // تحديث الحالة الحالية
+        if (this.originalSelect.value) {
+          this.setValue(this.originalSelect.value, false);
+        }
+      }
+
+      filterOptions() {
+        const searchTerm = this.searchInput.value.trim().toLowerCase();
+        const options = this.optionsContainer.querySelectorAll('.searchable-select-option');
+        let visibleCount = 0;
+        
+        options.forEach(opt => {
+          const text = opt.textContent.toLowerCase();
+          const matches = searchTerm === '' || text.includes(searchTerm);
+          opt.classList.toggle('hidden', !matches);
+          if (matches) visibleCount++;
+        });
+        
+        this.noResults.classList.toggle('visible', visibleCount === 0);
+      }
+
+      navigateOptions(direction) {
+        const visible = Array.from(this.optionsContainer.querySelectorAll('.searchable-select-option:not(.hidden):not(.disabled)'));
+        if (visible.length === 0) return;
+        
+        const focused = this.optionsContainer.querySelector('.searchable-select-option.focused');
+        let currentIndex = focused ? visible.indexOf(focused) : -1;
+        
+        if (focused) focused.classList.remove('focused');
+        
+        currentIndex += direction;
+        if (currentIndex < 0) currentIndex = visible.length - 1;
+        if (currentIndex >= visible.length) currentIndex = 0;
+        
+        visible[currentIndex].classList.add('focused');
+        visible[currentIndex].scrollIntoView({ block: 'nearest' });
+      }
+
+      selectOption(optionEl) {
+        // إزالة التحديد السابق
+        const prev = this.optionsContainer.querySelector('.searchable-select-option.selected');
+        if (prev) prev.classList.remove('selected');
+        
+        // تحديد الخيار الجديد
+        optionEl.classList.add('selected');
+        this.selectedValue = optionEl.getAttribute('data-value');
+        
+        // تحديث النص المعروض
+        this.trigger.textContent = optionEl.textContent;
+        this.trigger.classList.remove('placeholder');
+        
+        // تحديث القائمة الأصلية
+        this.originalSelect.value = this.selectedValue;
+        
+        // إطلاق حدث التغيير
+        this.originalSelect.dispatchEvent(new Event('change', { bubbles: true }));
+        
+        this.close();
+      }
+
+      setValue(value, triggerChange = true) {
+        const optionEl = this.optionsContainer.querySelector(`[data-value="${value}"]`);
+        if (optionEl) {
+          const prev = this.optionsContainer.querySelector('.searchable-select-option.selected');
+          if (prev) prev.classList.remove('selected');
+          
+          optionEl.classList.add('selected');
+          this.selectedValue = value;
+          this.trigger.textContent = optionEl.textContent;
+          this.trigger.classList.remove('placeholder');
+          
+          this.originalSelect.value = value;
+          
+          if (triggerChange) {
+            this.originalSelect.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+        }
+      }
+
+      reset() {
+        const prev = this.optionsContainer.querySelector('.searchable-select-option.selected');
+        if (prev) prev.classList.remove('selected');
+        
+        this.selectedValue = '';
+        const firstOpt = this.originalSelect.querySelector('option[disabled]');
+        this.trigger.textContent = firstOpt ? firstOpt.textContent : '';
+        this.trigger.classList.add('placeholder');
+        this.searchInput.value = '';
+        this.filterOptions();
+      }
+
+      toggle() {
+        this.isOpen ? this.close() : this.open();
+      }
+
+      open() {
+        this.isOpen = true;
+        this.container.classList.add('open');
+        this.trigger.setAttribute('aria-expanded', 'true');
+        this.searchInput.value = '';
+        this.filterOptions();
+        setTimeout(() => this.searchInput.focus(), 50);
+      }
+
+      close() {
+        this.isOpen = false;
+        this.container.classList.remove('open');
+        this.trigger.setAttribute('aria-expanded', 'false');
+        const focused = this.optionsContainer.querySelector('.searchable-select-option.focused');
+        if (focused) focused.classList.remove('focused');
+      }
+
+      updateConfig(config) {
+        this.config = { ...this.config, ...config };
+        this.searchInput.placeholder = this.config.searchPlaceholder;
+        this.noResults.textContent = this.config.noResultsText;
+      }
+
+      refresh() {
+        this.syncFromOriginal();
+      }
+    }
+
+    // تخزين مراجع للقوائم القابلة للبحث
+    let schoolSearchable = null;
+    let districtSearchable = null;
+
+    function initSearchableSelects() {
+      const S = STRINGS[currentLang];
+      
+      const schoolSelect = document.getElementById('schoolName');
+      const districtSelect = document.getElementById('district');
+      
+      if (schoolSelect && !schoolSearchable) {
+        schoolSearchable = new SearchableSelect(schoolSelect, {
+          searchPlaceholder: S.search_placeholder || 'ابحث عن المدرسة...',
+          noResultsText: S.no_results || 'لا توجد نتائج'
+        });
+      }
+      
+      if (districtSelect && !districtSearchable) {
+        districtSearchable = new SearchableSelect(districtSelect, {
+          searchPlaceholder: S.search_placeholder_district || 'ابحث عن الحي...',
+          noResultsText: S.no_results || 'لا توجد نتائج'
+        });
+      }
+    }
+
+    function refreshSearchableSelects() {
+      if (schoolSearchable) schoolSearchable.refresh();
+      if (districtSearchable) districtSearchable.refresh();
+    }
+
+    function updateSearchableSelectsLang() {
+      const S = STRINGS[currentLang];
+      if (schoolSearchable) {
+        schoolSearchable.updateConfig({
+          searchPlaceholder: S.search_placeholder || 'ابحث عن المدرسة...',
+          noResultsText: S.no_results || 'لا توجد نتائج'
+        });
+        schoolSearchable.refresh();
+      }
+      if (districtSearchable) {
+        districtSearchable.updateConfig({
+          searchPlaceholder: S.search_placeholder_district || 'ابحث عن الحي...',
+          noResultsText: S.no_results || 'لا توجد نتائج'
+        });
+        districtSearchable.refresh();
+      }
+    }
+
+    function resetSearchableSelects() {
+      if (schoolSearchable) schoolSearchable.reset();
+      if (districtSearchable) districtSearchable.reset();
+    }
+    // ===== نهاية نظام القوائم المنسدلة =====
+
     function updateSchoolsSelect(lang){
       const sel = document.getElementById("schoolName");
       if(!sel) return;
@@ -2538,6 +3001,9 @@
 
       sel.innerHTML = options.join("");
       if (names.includes(prev)) sel.value = prev;
+      
+      // تحديث القائمة القابلة للبحث
+      if (schoolSearchable) schoolSearchable.refresh();
     }
 
     function updateDistricts(lang){
@@ -2551,6 +3017,9 @@
         return `<option ${attrs}>${o.label}</option>`;
       }).join("");
       if (opts.some(o => o.code === prev)) sel.value = prev;
+      
+      // تحديث القائمة القابلة للبحث
+      if (districtSearchable) districtSearchable.refresh();
     }
 
     async function fetchBilingualSchools(){
@@ -2771,6 +3240,7 @@
       updateGradeLevels(lang);
       updateSchoolsSelect(lang);
       updateDistricts(lang);
+      updateSearchableSelectsLang();
 
       try { renderHelp(lang); } catch(_){}
     }
@@ -2778,8 +3248,6 @@
     function toggleLang(){ 
       const newLang = currentLang === 'ar' ? 'en' : 'ar';
       setLang(newLang);
-      // إطلاق حدث لتحديث Select2
-      $(document).trigger('languageChanged');
     }
 
     function showToastLikeStatus(message, type="default"){
@@ -3299,6 +3767,9 @@
       document.getElementById("saveBtn").classList.remove("active");
       showToastLikeStatus(S.reset_done, "info");
       setTimeout(()=>showToastLikeStatus(S.status_fill_required, "info"),2000);
+      
+      // إعادة تعيين القوائم القابلة للبحث
+      resetSearchableSelects();
     }
 
     document.addEventListener("DOMContentLoaded", ()=>{
@@ -3319,7 +3790,10 @@
 
       setLang(localStorage.getItem("lang")||"ar");
       updateGradeLevels(currentLang);
-      ensureDataLoaded();
+      ensureDataLoaded().then(() => {
+        // تهيئة القوائم القابلة للبحث بعد تحميل البيانات
+        initSearchableSelects();
+      });
 
       document.getElementById("locateBtn").addEventListener("click", locateUserNoMap);
       document.getElementById("saveBtn").addEventListener("click", saveRecord);
@@ -3378,137 +3852,6 @@
       });
 
       updateSubmitButton();
-      
-      // تهيئة Select2 مع ميزة بحث محسّنة
-      function matchCustom(params, data) {
-        // إذا لم يكن هناك بحث، إرجاع كل النتائج
-        if ($.trim(params.term) === '') return data;
-        
-        // إذا لم يكن لدينا نص
-        if (typeof data.text === 'undefined') return null;
-        
-        const term = params.term.toLowerCase().trim();
-        const text = data.text.toLowerCase();
-        
-        // بحث مرن يدعم الأحرف العربية والإنجليزية
-        if (text.indexOf(term) > -1) return data;
-        
-        // بحث بالكلمات - يبحث في بداية الكلمات
-        const words = text.split(' ');
-        for (let word of words) {
-          if (word.startsWith(term)) return data;
-        }
-        
-        return null;
-      }
-
-      const S = STRINGS[currentLang];
-      
-      if($("#schoolName").length){
-        $("#schoolName").select2({ 
-          width: '100%', 
-          minimumResultsForSearch: 0, // إظهار حقل البحث دائماً
-          dropdownParent: $('body'), 
-          dir: (currentLang==='ar'?'rtl':'ltr'), 
-          matcher: matchCustom,
-          placeholder: currentLang === 'ar' ? 'ابحث عن اسم المدرسة...' : 'Search for school name...',
-          language: {
-            searching: function() {
-              return currentLang === 'ar' ? 'جارٍ البحث...' : 'Searching...';
-            },
-            noResults: function() {
-              return currentLang === 'ar' ? 'لم يتم العثور على نتائج' : 'No results found';
-            },
-            inputTooShort: function(args) {
-              const msg = currentLang === 'ar' ? 'يرجى إدخال ' + args.minimum + ' أحرف أو أكثر' : 'Please enter ' + args.minimum + ' or more characters';
-              return msg;
-            },
-            loadingMore: function() {
-              return currentLang === 'ar' ? 'تحميل المزيد...' : 'Loading more...';
-            }
-          },
-          templateResult: function(data) {
-            if (!data.id) return data.text;
-            // إضافة أيقونة للمدرسة
-            const $result = $('<span><i class="fas fa-school" style="margin-' + (currentLang==='ar'?'left':'right') + ': 8px; color: #f59e0b;"></i> ' + data.text + '</span>');
-            return $result;
-          },
-          templateSelection: function(data) {
-            return data.text;
-          }
-        });
-        
-        // تحديث Select2 عند تغيير اللغة
-        $(document).on('languageChanged', function() {
-          if($("#schoolName").length){
-            $("#schoolName").select2('destroy');
-            $("#schoolName").select2({ 
-              width: '100%', 
-              minimumResultsForSearch: 0,
-              dropdownParent: $('body'), 
-              dir: (currentLang==='ar'?'rtl':'ltr'), 
-              matcher: matchCustom,
-              placeholder: currentLang === 'ar' ? 'ابحث عن اسم المدرسة...' : 'Search for school name...',
-              language: {
-                searching: function() { return currentLang === 'ar' ? 'جارٍ البحث...' : 'Searching...'; },
-                noResults: function() { return currentLang === 'ar' ? 'لم يتم العثور على نتائج' : 'No results found'; }
-              },
-              templateResult: function(data) {
-                if (!data.id) return data.text;
-                const $result = $('<span><i class="fas fa-school" style="margin-' + (currentLang==='ar'?'left':'right') + ': 8px; color: #f59e0b;"></i> ' + data.text + '</span>');
-                return $result;
-              }
-            });
-          }
-        });
-      }
-
-      if($("#district").length){
-        $("#district").select2({ 
-          width: '100%', 
-          minimumResultsForSearch: 0,
-          dropdownParent: $('body'), 
-          dir: (currentLang==='ar'?'rtl':'ltr'), 
-          matcher: matchCustom,
-          placeholder: currentLang === 'ar' ? 'ابحث عن اسم الحي...' : 'Search for district...',
-          language: {
-            searching: function() { return currentLang === 'ar' ? 'جارٍ البحث...' : 'Searching...'; },
-            noResults: function() { return currentLang === 'ar' ? 'لم يتم العثور على نتائج' : 'No results found'; }
-          },
-          templateResult: function(data) {
-            if (!data.id) return data.text;
-            const $result = $('<span><i class="fas fa-map-marker-alt" style="margin-' + (currentLang==='ar'?'left':'right') + ': 8px; color: #f59e0b;"></i> ' + data.text + '</span>');
-            return $result;
-          },
-          templateSelection: function(data) {
-            return data.text;
-          }
-        });
-        
-        // تحديث Select2 عند تغيير اللغة
-        $(document).on('languageChanged', function() {
-          if($("#district").length){
-            $("#district").select2('destroy');
-            $("#district").select2({ 
-              width: '100%', 
-              minimumResultsForSearch: 0,
-              dropdownParent: $('body'), 
-              dir: (currentLang==='ar'?'rtl':'ltr'), 
-              matcher: matchCustom,
-              placeholder: currentLang === 'ar' ? 'ابحث عن اسم الحي...' : 'Search for district...',
-              language: {
-                searching: function() { return currentLang === 'ar' ? 'جارٍ البحث...' : 'Searching...'; },
-                noResults: function() { return currentLang === 'ar' ? 'لم يتم العثور على نتائج' : 'No results found'; }
-              },
-              templateResult: function(data) {
-                if (!data.id) return data.text;
-                const $result = $('<span><i class="fas fa-map-marker-alt" style="margin-' + (currentLang==='ar'?'left':'right') + ': 8px; color: #f59e0b;"></i> ' + data.text + '</span>');
-                return $result;
-              }
-            });
-          }
-        });
-      }
     });
 
     // نظام المساعدة
