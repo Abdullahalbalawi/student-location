@@ -92,7 +92,7 @@
                   0 0 0 1px rgba(255, 255, 255, 0.8);
       margin: 0 1rem 1.2rem;
       position: relative;
-      overflow: hidden;
+      overflow: visible;
     }
     
     .card::before {
@@ -299,6 +299,7 @@
     .searchable-select {
       position: relative;
       width: 100%;
+      z-index: 10;
     }
     
     .searchable-select-trigger {
@@ -375,7 +376,7 @@
       border: 2px solid rgba(251, 191, 36, 0.4);
       border-radius: 14px;
       box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-      z-index: 100;
+      z-index: 9999;
       display: none;
       overflow: hidden;
       animation: dropdownFadeIn 0.2s ease;
@@ -1830,37 +1831,6 @@
       vertical-align:middle;
     }
 
-    #backToTop{
-      display: none;
-      position: fixed;
-      bottom: 24px;
-      inset-inline-end: 24px;
-      z-index: 99;
-      background: linear-gradient(135deg, #f59e0b, #ea580c);
-      color: #fff;
-      border: none;
-      border-radius: 50%;
-      width: 56px;
-      height: 56px;
-      font-size: 1.3rem;
-      cursor: pointer;
-      box-shadow: 0 6px 24px rgba(245, 158, 11, 0.4);
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    #backToTop:hover{
-      background: linear-gradient(135deg, #ea580c, #dc2626);
-      transform: translateY(-4px);
-      box-shadow: 0 8px 32px rgba(245, 158, 11, 0.5);
-    }
-    
-    #backToTop:active {
-      transform: translateY(-2px);
-    }
-    }
 
     .footer-contact, .footer-social {
       margin-top: .6rem;
@@ -1944,7 +1914,8 @@
       border-radius: 0;
       box-shadow: 0 -8px 32px rgba(120, 53, 15, 0.3);
       position: relative;
-      overflow: hidden;
+      overflow: visible;
+      z-index: 0;
     }
     
     .app-footer::before {
@@ -2471,9 +2442,6 @@
     <p class="footer-dev">تم التطوير بواسطة عبدالله البلوي</p>
 
 </footer>
-
-
-  <button id="backToTop" title="العودة لأعلى"><i class="fas fa-arrow-up"></i></button>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   
@@ -4059,18 +4027,6 @@
     })();
 
     window.renderHelp = renderHelp;
-
-    // زر العودة لأعلى
-    (function(){
-      const btn = document.getElementById('backToTop');
-      if(btn){
-        window.addEventListener('scroll', () => {
-          const sc = document.documentElement.scrollTop || document.body.scrollTop;
-          btn.style.display = (sc > 200 ? 'block' : 'none');
-        });
-        btn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
-      }
-    })();
 
     // تسجيل Service Worker
     (function(){
